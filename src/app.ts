@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import i18NextSetup from './core/config/i18n';
 
 export const app = express();
 
@@ -8,6 +9,9 @@ app.use(express.json());
 
 /* Logging */
 app.use(morgan('dev'));
+
+/* Localization */
+app.use(i18NextSetup);
 
 /** API Rules */
 app.use((req, res, next) => {
@@ -22,5 +26,5 @@ app.use((req, res, next) => {
 
 /** Routes */
 app.use('/hello', (req, res, next) => {
-  res.status(200).send('hello world!');
+  res.status(200).send(req.t('test'));
 });
