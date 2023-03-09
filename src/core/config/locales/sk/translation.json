@@ -1,1 +1,42 @@
-{}
+{
+  "common": {
+    "errors": {
+      "user": {
+        "notFound": "Užívateľ nebol nájdený",
+        "unauthorized": "Používateľ nemá oprávnenie"
+      },
+      "matrix": {
+        "notFound": "Matica nebola nájdená"
+      },
+      "session": {
+        "notFound": "Relácia nebola nájdená"
+      },
+      "internal": "Interná chyba servera",
+      "requestValidation": "Overenie žiadosti zlyhalo"
+    },
+    "validations": {
+      "email": "Nesprávna emailová adresa",
+      "uniqueEmail": "Email sa už používa",
+      "password": "Musí mať aspoň 8 znakov, musí obsahovať malé a veľké písmeno a číslicu",
+      "passwordsMatch": "Heslá sa nezhodujú",
+      "nameLength": "Musí mať 3 až 50 znakov",
+      "max": "Musí mať {{size}} alebo menej znakov",
+      "min": "Musí mať {{size}} alebo viac znakov",
+      "required": "Povinné"
+    }
+  },
+  "auth": {
+    "register": {
+      "success": "Účet bol úspešne vytvorený"
+    },
+    "login": {
+      "success": "Používateľ bol úspešne overený"
+    },
+    "password": {
+      "success": "Heslo bolo úspešne zmenené"
+    },
+    "getUser": {
+      "success": "Údaje používateľa boli úspešne načítané"
+    }
+  }
+}

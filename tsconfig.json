@@ -8,8 +8,7 @@
     "strict": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "baseUrl": "src"
+    "resolveJsonModule": true
   },
   "include": ["src", "tests"],
   "exclude": ["dist", "prisma", "**/*.test.ts"]

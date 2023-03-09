@@ -1,7 +1,9 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
+import authRoutes from './auth/routes/authRoutes';
 import i18NextSetup from './core/config/i18n';
-
+import HttpCode from './core/types/httpCode';
+import RequestError from './core/types/requestError';
 export const app = express();
 
 /* Request body parsing */
@@ -13,7 +15,7 @@ app.use(morgan('dev'));
 /* Localization */
 app.use(i18NextSetup);
 
-/** API Rules */
+/* API Rules */
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
@@ -24,7 +26,25 @@ app.use((req, res, next) => {
   next();
 });
 
-/** Routes */
-app.use('/hello', (req, res, next) => {
-  res.status(200).send(req.t('test'));
-});
+/* Routes */
+app.use(authRoutes);
+
+/* Error handling */
+app.use(
+  (
+    err: RequestError | Error,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (err instanceof RequestError) {
+      return res.status(err.statusCode).json({
+        message: req.t(err.message as any),
+        errors: err.errors,
+      });
+    }
+    return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
+      message: req.t('common.errors.internal'),
+    });
+  }
+);

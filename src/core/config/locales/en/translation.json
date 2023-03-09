@@ -1,1 +1,42 @@
-{}
+{
+  "common": {
+    "errors": {
+      "user": {
+        "notFound": "User not found",
+        "unauthorized": "User unauthorized"
+      },
+      "matrix": {
+        "notFound": "Matrix not found"
+      },
+      "session": {
+        "notFound": "Session not found"
+      },
+      "internal": "Internal server error",
+      "requestValidation": "Request validation failed"
+    },
+    "validations": {
+      "email": "Invalid email address",
+      "uniqueEmail": "Email is already taken",
+      "password": "Must be at least 8 characters, must contain a lower and upper case letter and a digit",
+      "passwordsMatch": "Password does not match",
+      "nameLength": "Must be between 3 and 50 characters long",
+      "max": "Must be {{size}} characters or less",
+      "min": "Must be {{size}} characters or more",
+      "required": "Required"
+    }
+  },
+  "auth": {
+    "register": {
+      "success": "Account has been created successfully"
+    },
+    "login": {
+      "success": "User authenticated successfully"
+    },
+    "password": {
+      "success": "Password has been changed successfully"
+    },
+    "getUser": {
+      "success": "User data has been retrieved successfully"
+    }
+  }
+}
