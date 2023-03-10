@@ -8,7 +8,7 @@ RUN npm install
 
 COPY prisma/schema.prisma ./prisma/
 
-# RUN npx prisma generate - no models yet
+RUN npx prisma generate
 
 COPY . .
 

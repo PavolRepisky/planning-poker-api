@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import userService from '../../core/services/userService';
+import userService from '../../user/services/userService';
 import HttpCode from '../../core/types/httpCode';
 import UserInfo from '../../core/types/userInfo';
 import USER_NOT_FOUND from '../../core/types/userNotFound';
@@ -30,7 +30,7 @@ const login = async (
 ): Promise<void> => {
   try {
     const { email } = req.body;
-    const user = await userService.findUserByEmail(email);
+    const user = await userService.findByEmail(email);
 
     if (!user) {
       throw USER_NOT_FOUND;
@@ -56,7 +56,7 @@ const getUser = async (
 ): Promise<void> => {
   try {
     const decodedToken = res.locals.token;
-    const user = await userService.findUserById(decodedToken.userId);
+    const user = await userService.findById(decodedToken.userId);
 
     if (!user) {
       throw USER_NOT_FOUND;

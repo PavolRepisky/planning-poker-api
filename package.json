@@ -9,7 +9,7 @@
     "test": "dotenv -e .env.test npx prisma db push --force-reset && dotenv -e .env.test jest --detectOpenHandles",
     "rebuild": "docker compose build api && docker compose rm --stop -f api && docker compose up -d api",
     "push": "docker exec api npx prisma db push",
-    "studio": "DATABASE_URL=postgresql://admin:admin@localhost:6001/msp?schema=public npx prisma studio",
+    "studio": "DATABASE_URL=postgresql://admin:admin@localhost:6000/msp?schema=public npx prisma studio",
     "seed": "ts-node-dev prisma/seed.ts"
   },
   "author": "Pavol Repiský",
