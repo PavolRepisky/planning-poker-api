@@ -1,20 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
-import userService from '../../user/services/userService';
+import comparePasswords from '../../auth/utils/comparePasswords';
+import userService from '../services/userService';
 import { INTERNAL_SERVER_ERROR } from '../../core/types/internalServerError';
+import USER_NOT_FOUND from '../../core/types/userNotFound';
 import { USER_UNAUTHORIZED } from '../../core/types/userUnauthorized';
-import comparePasswords from '../utils/comparePasswords';
 
-const validateLoginCredentials = async (
+const validatePassword = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { email, password } = req.body;
-    const user = await userService.findByEmail(email);
+    const decodedToken = res.locals.token;
+    const { password } = req.body;
+
+    const user = await userService.findById(decodedToken.userId);
 
     if (!user) {
-      return next(USER_UNAUTHORIZED);
+      return next(USER_NOT_FOUND);
     }
 
     const passwordIsCorrect = comparePasswords(password, user.password);
@@ -28,4 +31,4 @@ const validateLoginCredentials = async (
   }
 };
 
-export default validateLoginCredentials;
+export default validatePassword;

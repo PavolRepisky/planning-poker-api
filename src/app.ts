@@ -4,6 +4,7 @@ import authRoutes from './auth/routes/authRoutes';
 import i18NextSetup from './core/config/i18n';
 import HttpCode from './core/types/httpCode';
 import RequestError from './core/types/requestError';
+import userRoutes from './user/routes/userRoutes';
 export const app = express();
 
 /* Request body parsing */
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 
 /* Routes */
 app.use(authRoutes);
+app.use(userRoutes);
 
 /* Error handling */
 app.use(

@@ -32,11 +32,16 @@
     "login": {
       "success": "User authenticated successfully"
     },
-    "password": {
-      "success": "Password has been changed successfully"
-    },
     "getUser": {
       "success": "User data has been retrieved successfully"
+    }
+  },
+  "user": {
+    "passwordUpdate": {
+      "success": "Password has been changed successfully"
+    },
+    "nameUpdate": {
+      "success": "Name has been changed successfully"
     }
   }
 }
