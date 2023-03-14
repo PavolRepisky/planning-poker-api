@@ -34,8 +34,8 @@ const updateName = async (
         } as UserInfo,
       },
     });
-  } catch (error: any) {
-    next(error);
+  } catch (err: any) {
+    next(err);
   }
 };
 
@@ -60,8 +60,8 @@ const updatePassword = async (
     res.status(HttpCode.OK).json({
       message: req.t('user.passwordUpdate.success'),
     });
-  } catch (error: any) {
-    next(error);
+  } catch (err: any) {
+    next(err);
   }
 };
 

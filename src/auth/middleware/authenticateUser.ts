@@ -20,7 +20,7 @@ const authenticateUser = async (
     }
     res.locals.token = decodedToken;
     next();
-  } catch (error: any) {
+  } catch (err: any) {
     next(USER_UNAUTHORIZED);
   }
 };

@@ -4,6 +4,7 @@ import authRoutes from './auth/routes/authRoutes';
 import i18NextSetup from './core/config/i18n';
 import HttpCode from './core/types/httpCode';
 import RequestError from './core/types/requestError';
+import matrixRoutes from './matrix/routes/matrixRoutes';
 import userRoutes from './user/routes/userRoutes';
 export const app = express();
 
@@ -29,7 +30,8 @@ app.use((req, res, next) => {
 
 /* Routes */
 app.use(authRoutes);
-app.use(userRoutes);
+app.use('/users', userRoutes);
+app.use('/matrices', matrixRoutes);
 
 /* Error handling */
 app.use(

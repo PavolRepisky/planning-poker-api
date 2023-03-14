@@ -18,8 +18,8 @@ const register = async (
     res.status(HttpCode.CREATED).json({
       message: req.t('auth.register.success'),
     });
-  } catch (error: any) {
-    next(error);
+  } catch (err: any) {
+    next(err);
   }
 };
 
@@ -44,8 +44,8 @@ const login = async (
         token,
       },
     });
-  } catch (error: any) {
-    next(error);
+  } catch (err: any) {
+    next(err);
   }
 };
 
@@ -65,7 +65,7 @@ const getUser = async (
     const { id, firstName, lastName, email } = user;
 
     res.status(HttpCode.OK).json({
-      message: req.t('auth.login.success'),
+      message: req.t('auth.getUser.success'),
       data: {
         user: {
           id,
@@ -75,8 +75,8 @@ const getUser = async (
         } as UserInfo,
       },
     });
-  } catch (error: any) {
-    next(error);
+  } catch (err: any) {
+    next(err);
   }
 };
 

@@ -18,11 +18,16 @@
       "email": "Invalid email address",
       "uniqueEmail": "Email is already taken",
       "password": "Must be at least 8 characters, must contain a lower and upper case letter and a digit",
-      "passwordsMatch": "Password does not match",
+      "passwordsMatch": "Passwords does not match",
       "nameLength": "Must be between 3 and 50 characters long",
       "max": "Must be {{size}} characters or less",
       "min": "Must be {{size}} characters or more",
-      "required": "Required"
+      "required": "Required",
+      "matrixSize": "Must be an integer greater than 1",
+      "twoDimStringArray": "Must be two dimensional string array",
+      "uniqueValues": "Must contain unique values only",
+      "uniqueName": "Name is already taken",
+      "sizeMatch": "Does not match with rows and columns"
     }
   },
   "auth": {
@@ -42,6 +47,23 @@
     },
     "nameUpdate": {
       "success": "Name has been changed successfully"
+    }
+  },
+  "matrix": {
+    "create": {
+      "success": "Matrix has been created successfully"
+    },
+    "update": {
+      "success": "Matrix has been updated successfully"
+    },
+    "list": {
+      "success": "Matrices has been listed successfully"
+    },
+    "view": {
+      "success": "Matrix has been listed successfully"
+    },
+    "remove": {
+      "success": "Matrix has been removed successfully"
     }
   }
 }
