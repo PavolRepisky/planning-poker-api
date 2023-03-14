@@ -36,11 +36,11 @@ const updatePassword = async (
       },
     });
     return updatedUser;
-  } catch (error: any) {
-    if (error instanceof PrismaClientUnknownRequestError) {
+  } catch (err: any) {
+    if (err instanceof PrismaClientUnknownRequestError) {
       throw USER_NOT_FOUND;
     }
-    throw error;
+    throw err;
   }
 };
 
@@ -60,11 +60,11 @@ const updateName = async (
       },
     });
     return updatedUser;
-  } catch (error: any) {
-    if (error instanceof PrismaClientUnknownRequestError) {
+  } catch (err: any) {
+    if (err instanceof PrismaClientUnknownRequestError) {
       throw USER_NOT_FOUND;
     }
-    throw error;
+    throw err;
   }
 };
 

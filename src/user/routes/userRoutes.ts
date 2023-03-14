@@ -10,13 +10,13 @@ import validatePassword from '../middleware/validatePassword';
 const userRoutes = express.Router();
 
 userRoutes.patch(
-  '/user/name',
+  '/name',
   [authenticateUser, validateSchema(checkSchema(nameUpdateSchema))],
   userController.updateName
 );
 
 userRoutes.patch(
-  '/user/password',
+  '/password',
   [
     authenticateUser,
     validateSchema(checkSchema(passwordUpdateSchema)),
