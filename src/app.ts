@@ -1,11 +1,12 @@
 import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
-import authRoutes from './auth/routes/authRoutes';
-import i18NextSetup from './core/config/i18n';
-import HttpCode from './core/types/httpCode';
-import RequestError from './core/types/requestError';
-import matrixRoutes from './matrix/routes/matrixRoutes';
-import userRoutes from './user/routes/userRoutes';
+import i18NextSetup from './config/i18n';
+import authRoutes from './routes/authRoutes';
+import matrixRoutes from './routes/matrixRoutes';
+import userRoutes from './routes/userRoutes';
+import HttpCode from './types/core/httpCode';
+import RequestError from './types/core/requestError';
+
 export const app = express();
 
 /* Request body parsing */
