@@ -27,7 +27,9 @@
       "twoDimStringArray": "Must be two dimensional string array",
       "uniqueValues": "Must contain unique values only",
       "uniqueName": "Name is already taken",
-      "sizeMatch": "Does not match with rows and columns"
+      "sizeMatch": "Does not match with rows and columns",
+      "integer": "Must be an integer",
+      "matrixId": "Wrong matrix id"
     }
   },
   "auth": {
@@ -64,6 +66,17 @@
     },
     "remove": {
       "success": "Matrix has been removed successfully"
+    }
+  },
+  "session": {
+    "create": {
+      "success": "Session has been created successfully"
+    },
+    "join": {
+      "success": "Session has been joined successfully"
+    },
+    "createVoting": {
+      "success": "Voting has been created successfully"
     }
   }
 }

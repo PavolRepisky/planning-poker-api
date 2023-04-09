@@ -1,13 +1,19 @@
+import * as cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
+import * as http from 'http';
 import morgan from 'morgan';
 import i18NextSetup from './config/i18n';
 import authRoutes from './routes/authRoutes';
 import matrixRoutes from './routes/matrixRoutes';
+import sessionRoutes from './routes/sessionRoutes';
 import userRoutes from './routes/userRoutes';
 import HttpCode from './types/core/httpCode';
 import RequestError from './types/core/requestError';
+import { setupSocketServer } from './utils/session/socketManager';
 
-export const app = express();
+const app = express();
+const server = http.createServer(app);
+setupSocketServer(server);
 
 /* Request body parsing */
 app.use(express.json());
@@ -17,6 +23,9 @@ app.use(morgan('dev'));
 
 /* Localization */
 app.use(i18NextSetup);
+
+/* Socket IO */
+app.use(cors.default());
 
 /* API Rules */
 app.use((req, res, next) => {
@@ -33,6 +42,7 @@ app.use((req, res, next) => {
 app.use(authRoutes);
 app.use('/users', userRoutes);
 app.use('/matrices', matrixRoutes);
+app.use('/sessions', sessionRoutes);
 
 /* Error handling */
 app.use(
@@ -53,3 +63,5 @@ app.use(
     });
   }
 );
+
+export default server;

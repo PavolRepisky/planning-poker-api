@@ -1,9 +1,10 @@
-interface MatrixInfo {
+interface MatrixData {
   id: number;
   name: string;
   rows: number;
   columns: number;
   values: string[][];
+  createdAt: Date;
 }
 
-export default MatrixInfo;
+export default MatrixData;
