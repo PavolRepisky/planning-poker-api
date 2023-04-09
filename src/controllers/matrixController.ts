@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import matrixService from '../services/matrixService';
 import HttpCode from '../types/core/httpCode';
 import MATRIX_NOT_FOUND from '../types/core/matrixNotFound';
-import MatrixInfo from '../types/matrix/MatrixInfo';
+import MatrixData from '../types/matrix/MatrixData';
 import parseMatrixValuesToArray from '../utils/matrix/parseMatrixValuesToArray';
 
 const create = async (
@@ -31,7 +31,8 @@ const create = async (
           rows: createdMatrix.rows,
           columns: createdMatrix.columns,
           values: parseMatrixValuesToArray(createdMatrix.values),
-        },
+          createdAt: createdMatrix.createdAt,
+        } as MatrixData,
       },
     });
   } catch (err: any) {
@@ -65,7 +66,8 @@ const update = async (
           rows: updatedMatrix.rows,
           columns: updatedMatrix.columns,
           values: parseMatrixValuesToArray(updatedMatrix.values),
-        },
+          createdAt: updatedMatrix.createdAt,
+        } as MatrixData,
       },
     });
   } catch (err: any) {
@@ -84,14 +86,15 @@ const list = async (
     const matrices = await matrixService.findByCreatorId(decodedToken.userId);
 
     const mappedMatrices = matrices.map((matrix) => {
-      const { id, name, rows, columns, values } = matrix;
+      const { id, name, rows, columns, values, createdAt } = matrix;
       return {
         id,
         name,
         rows,
         columns,
         values: parseMatrixValuesToArray(values),
-      } as MatrixInfo;
+        createdAt,
+      } as MatrixData;
     });
 
     res.status(HttpCode.OK).json({
@@ -103,6 +106,7 @@ const list = async (
   }
 };
 
+// TODO: incorrect matrixId validation
 const view = async (
   req: Request,
   res: Response,
@@ -116,7 +120,7 @@ const view = async (
       throw MATRIX_NOT_FOUND;
     }
 
-    const { id, name, rows, columns, values } = matrix;
+    const { id, name, rows, columns, values, createdAt } = matrix;
 
     res.status(HttpCode.OK).json({
       message: req.t('matrix.view.success'),
@@ -127,7 +131,8 @@ const view = async (
           rows,
           columns,
           values: parseMatrixValuesToArray(values),
-        } as MatrixInfo,
+          createdAt,
+        } as MatrixData,
       },
     });
   } catch (err: any) {
@@ -154,7 +159,8 @@ const remove = async (
           rows: removedMatrix.rows,
           columns: removedMatrix.columns,
           values: parseMatrixValuesToArray(removedMatrix.values),
-        },
+          createdAt: removedMatrix.createdAt,
+        } as MatrixData,
       },
     });
   } catch (err: any) {
