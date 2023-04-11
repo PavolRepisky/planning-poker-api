@@ -1,8 +1,11 @@
+import dotenv from 'dotenv';
 import { Schema } from 'express-validator';
 import hasUniqueValues from '../../utils/matrix/hasUniqueValues';
 import isTwoDimensionalArray from '../../utils/matrix/isTwoDimesionalStringArray';
 
-const createEditSchema: Schema = {
+dotenv.config();
+
+const createUpdateSchema: Schema = {
   name: {
     exists: {
       options: { checkFalsy: true },
@@ -22,7 +25,7 @@ const createEditSchema: Schema = {
       bail: true,
     },
     isInt: {
-      options: { min: 2 },
+      options: { min: 1, max: Number(process.env.MATRIX_MAX_ROWS) },
       errorMessage: 'common.validations.matrixSize',
     },
     toInt: true,
@@ -34,7 +37,7 @@ const createEditSchema: Schema = {
       bail: true,
     },
     isInt: {
-      options: { min: 2 },
+      options: { min: 1, max: Number(process.env.MATRIX_MAX_COLUMNS) },
       errorMessage: 'common.validations.matrixSize',
     },
     toInt: true,
@@ -72,4 +75,4 @@ const createEditSchema: Schema = {
   },
 };
 
-export default createEditSchema;
+export default createUpdateSchema;

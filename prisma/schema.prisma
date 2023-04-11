@@ -23,7 +23,7 @@ model User {
 
 model Matrix {
   id        Int       @id @default(autoincrement())
-  name      String    @unique
+  name      String
   rows      Int
   columns   Int
   values    Json

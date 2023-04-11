@@ -14,6 +14,7 @@ const validateOwnership = async (
     const matrixId = Number(req.params.id);
 
     const matrix = await matrixService.findById(matrixId);
+
     if (!matrix) {
       return next(MATRIX_NOT_FOUND);
     }

@@ -106,7 +106,6 @@ const list = async (
   }
 };
 
-// TODO: incorrect matrixId validation
 const view = async (
   req: Request,
   res: Response,

@@ -46,7 +46,6 @@ export const setupSocketServer = (server: http.Server) => {
       'joinSession',
       async (sessionId: string, userData: ClientSessionUserData) => {
         const sessionJoined = await joinSession(socket, sessionId, userData);
-        console.log('sessions', sessionManager.activeSessions);
 
         if (sessionJoined) {
           socket.on('vote', async (voteCardData: VoteCardData) => {

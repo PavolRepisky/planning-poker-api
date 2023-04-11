@@ -11,11 +11,19 @@ const validateNamelIsAvailable = async (
 ): Promise<void> => {
   try {
     const { name } = req.body;
+    const decodedToken = res.locals.token;
+    const editMode = req.method === 'PATCH';
 
-    const matrix = await matrixService.findByName(name);
+    const userMatrices = await matrixService.findByCreatorId(
+      decodedToken.userId
+    );
+    const matrixWithSameName = userMatrices.find(
+      (matrix) => matrix.name === name
+    );
+
     if (
-      matrix &&
-      (req.method !== 'PATCH' || matrix.id != Number(req.params?.id))
+      matrixWithSameName &&
+      (!editMode || matrixWithSameName.id != Number(req.params?.id))
     ) {
       const validationError = {
         value: name,

@@ -2,7 +2,7 @@ import { Matrix } from '@prisma/client';
 import {
   PrismaClientKnownRequestError,
   PrismaClientUnknownRequestError,
-} from '@prisma/client/runtime';
+} from '@prisma/client/runtime/library';
 import prisma from '../config/client';
 import MATRIX_NOT_FOUND from '../types/core/matrixNotFound';
 
@@ -60,15 +60,6 @@ const findById = async (id: number): Promise<Matrix | null> => {
   return matrix;
 };
 
-const findByName = async (name: string): Promise<Matrix | null> => {
-  const matrix = await prisma.matrix.findUnique({
-    where: {
-      name,
-    },
-  });
-  return matrix;
-};
-
 const findByCreatorId = (creatorId: string): Promise<Matrix[]> => {
   return prisma.matrix.findMany({
     where: {
@@ -97,6 +88,5 @@ export default {
   update,
   findById,
   findByCreatorId,
-  findByName,
   deleteById,
 };

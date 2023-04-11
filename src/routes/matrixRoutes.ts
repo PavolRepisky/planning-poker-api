@@ -3,7 +3,7 @@ import { checkSchema } from 'express-validator';
 import matrixController from '../controllers/matrixController';
 import authenticateUser from '../middleware/auth/authenticateUser';
 import validateSchema from '../middleware/core/validateSchema';
-import createEditSchema from '../middleware/matrix/createEditSchema';
+import createUpdateSchema from '../middleware/matrix/createUpdateSchema';
 import validateNamelIsAvailable from '../middleware/matrix/validateNameIsAvailable';
 import validateOwnership from '../middleware/matrix/validateOwnership';
 
@@ -13,17 +13,17 @@ matrixRoutes.post(
   '/',
   [
     authenticateUser,
-    validateSchema(checkSchema(createEditSchema)),
+    validateSchema(checkSchema(createUpdateSchema)),
     validateNamelIsAvailable,
   ],
   matrixController.create
 );
 
 matrixRoutes.patch(
-  '/:id',
+  '/:id(\\d+)/',
   [
     authenticateUser,
-    validateSchema(checkSchema(createEditSchema)),
+    validateSchema(checkSchema(createUpdateSchema)),
     validateNamelIsAvailable,
     validateOwnership,
   ],
@@ -33,13 +33,13 @@ matrixRoutes.patch(
 matrixRoutes.get('/', [authenticateUser], matrixController.list);
 
 matrixRoutes.get(
-  '/:id',
+  '/:id(\\d+)/',
   [authenticateUser, validateOwnership],
   matrixController.view
 );
 
 matrixRoutes.delete(
-  '/:id',
+  '/:id(\\d+)/',
   [authenticateUser, validateOwnership],
   matrixController.remove
 );
