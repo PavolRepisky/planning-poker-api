@@ -1,5 +1,6 @@
 import { User } from '@prisma/client';
 import prisma from '../config/client';
+import INTERNAL_SERVER_ERROR from '../types/core/internalServerError';
 import hashPassword from '../utils/auth/hashPassword';
 
 const createUser = (
@@ -8,14 +9,18 @@ const createUser = (
   email: string,
   password: string
 ): Promise<User> => {
-  return prisma.user.create({
-    data: {
-      firstName,
-      lastName,
-      email,
-      password: hashPassword(password),
-    },
-  });
+  try {
+    return prisma.user.create({
+      data: {
+        firstName,
+        lastName,
+        email,
+        password: hashPassword(password),
+      },
+    });
+  } catch {
+    throw INTERNAL_SERVER_ERROR;
+  }
 };
 
 export default {

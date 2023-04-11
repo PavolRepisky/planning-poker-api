@@ -1,8 +1,8 @@
-interface UserInfo {
+interface UserData {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
 }
 
-export default UserInfo;
+export default UserData;

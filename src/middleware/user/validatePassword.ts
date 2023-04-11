@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import userService from '../../services/userService';
+import INTERNAL_SERVER_ERROR from '../../types/core/internalServerError';
+import USER_NOT_FOUND from '../../types/core/userNotFound';
+import USER_UNAUTHORIZED from '../../types/core/userUnauthorized';
 import comparePasswords from '../../utils/auth/comparePasswords';
-import INTERNAL_SERVER_ERROR from '../core/internalServerError';
-import USER_NOT_FOUND from '../core/userNotFound';
-import USER_UNAUTHORIZED from '../core/userUnauthorized';
 
 const validatePassword = async (
   req: Request,

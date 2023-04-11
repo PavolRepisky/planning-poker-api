@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import authService from '../services/authService';
 import userService from '../services/userService';
 import HttpCode from '../types/core/httpCode';
-import UserInfo from '../types/core/userInfo';
 import USER_NOT_FOUND from '../types/core/userNotFound';
+import UserData from '../types/user/userData';
 import signToken from '../utils/auth/signToken';
 
 const register = async (
@@ -13,10 +13,19 @@ const register = async (
 ): Promise<void> => {
   try {
     const { firstName, lastName, email, password } = req.body;
-    await authService.createUser(firstName, lastName, email, password);
+
+    const user = await authService.createUser(
+      firstName,
+      lastName,
+      email,
+      password
+    );
 
     res.status(HttpCode.CREATED).json({
       message: req.t('auth.register.success'),
+      data: {
+        userId: user.id,
+      },
     });
   } catch (err: any) {
     next(err);
@@ -56,6 +65,7 @@ const getUser = async (
 ): Promise<void> => {
   try {
     const decodedToken = res.locals.token;
+
     const user = await userService.findById(decodedToken.userId);
 
     if (!user) {
@@ -72,7 +82,7 @@ const getUser = async (
           firstName,
           lastName,
           email,
-        } as UserInfo,
+        } as UserData,
       },
     });
   } catch (err: any) {
