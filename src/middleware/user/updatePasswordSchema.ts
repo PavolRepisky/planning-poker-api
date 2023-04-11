@@ -1,7 +1,7 @@
 import { Schema } from 'express-validator';
 import passwordRegex from '../../types/auth/passwordRegex';
 
-const passwordUpdateSchema: Schema = {
+const updatePasswordSchema: Schema = {
   password: {
     exists: {
       options: { checkFalsy: true },
@@ -37,4 +37,4 @@ const passwordUpdateSchema: Schema = {
   },
 };
 
-export default passwordUpdateSchema;
+export default updatePasswordSchema;

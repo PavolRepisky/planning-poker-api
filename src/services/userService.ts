@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
+import { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library';
 import prisma from '../config/client';
 import USER_NOT_FOUND from '../types/core/userNotFound';
 import hashPassword from '../utils/auth/hashPassword';

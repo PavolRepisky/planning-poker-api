@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import userService from '../services/userService';
 import HttpCode from '../types/core/httpCode';
-import UserInfo from '../types/core/userInfo';
 import USER_NOT_FOUND from '../types/core/userNotFound';
+import UserData from '../types/user/userData';
 
-const updateName = async (
+const updateProfile = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -31,7 +31,7 @@ const updateName = async (
           firstName: updatedUser.firstName,
           lastName: updatedUser.lastName,
           email: updatedUser.email,
-        } as UserInfo,
+        } as UserData,
       },
     });
   } catch (err: any) {
@@ -48,14 +48,7 @@ const updatePassword = async (
     const decodedToken = res.locals.token;
     const { newPassword } = req.body;
 
-    const updatedUser = await userService.updatePassword(
-      decodedToken.userId,
-      newPassword
-    );
-
-    if (!updatedUser) {
-      throw USER_NOT_FOUND;
-    }
+    await userService.updatePassword(decodedToken.userId, newPassword);
 
     res.status(HttpCode.OK).json({
       message: req.t('user.passwordUpdate.success'),
@@ -65,4 +58,4 @@ const updatePassword = async (
   }
 };
 
-export default { updateName, updatePassword };
+export default { updateProfile, updatePassword };

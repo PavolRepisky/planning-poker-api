@@ -3,23 +3,23 @@ import { checkSchema } from 'express-validator';
 import userController from '../controllers/userController';
 import authenticateUser from '../middleware/auth/authenticateUser';
 import validateSchema from '../middleware/core/validateSchema';
-import nameUpdateSchema from '../types/user/nameUpdateSchema';
-import passwordUpdateSchema from '../types/user/passwordUpdateSchema';
-import validatePassword from '../types/user/validatePassword';
+import updatePasswordSchema from '../middleware/user/updatePasswordSchema';
+import updateProfileSchema from '../middleware/user/updateProfileSchema';
+import validatePassword from '../middleware/user/validatePassword';
 
 const userRoutes = express.Router();
 
 userRoutes.patch(
-  '/name',
-  [authenticateUser, validateSchema(checkSchema(nameUpdateSchema))],
-  userController.updateName
+  '/profile',
+  [authenticateUser, validateSchema(checkSchema(updateProfileSchema))],
+  userController.updateProfile
 );
 
 userRoutes.patch(
   '/password',
   [
     authenticateUser,
-    validateSchema(checkSchema(passwordUpdateSchema)),
+    validateSchema(checkSchema(updatePasswordSchema)),
     validatePassword,
   ],
   userController.updatePassword

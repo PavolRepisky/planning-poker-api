@@ -1,6 +1,6 @@
 import { Schema } from 'express-validator';
 
-const nameUpdateSchema: Schema = {
+const updateProfileSchema: Schema = {
   firstName: {
     exists: {
       options: { checkFalsy: true },
@@ -27,4 +27,4 @@ const nameUpdateSchema: Schema = {
   },
 };
 
-export default nameUpdateSchema;
+export default updateProfileSchema;
