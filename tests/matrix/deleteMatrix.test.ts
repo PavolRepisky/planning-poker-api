@@ -84,7 +84,7 @@ afterAll(async () => {
   await prisma.user.deleteMany({
     where: {
       id: {
-        in: [testData1.user.id, testData2.user.id],
+        in: [testData1.user.id, testData2.user.id, testDataToBeDeleted.user.id],
       },
     },
   });

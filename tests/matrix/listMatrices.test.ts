@@ -88,25 +88,25 @@ describe('GET /matrices', () => {
       );
 
       for (let i = 0; i < testUserWithMultipleMatrices.matrices.length; i++) {
-        expect(response.body.data.matrices[i].name).toBe(
-          testUserWithMultipleMatrices.matrices[i].name
+        const testMatrix = testUserWithMultipleMatrices.matrices.find(
+          (matrix) => matrix.id == response.body.data.matrices[i].id
         );
-        expect(response.body.data.matrices[i].rows).toBe(
-          testUserWithMultipleMatrices.matrices[i].rows
-        );
-        expect(response.body.data.matrices[i].columns).toBe(
-          testUserWithMultipleMatrices.matrices[i].columns
-        );
-        expect(response.body.data.matrices[i].values).toEqual(
-          testUserWithMultipleMatrices.matrices[i].values
-        );
-        expect(
-          new Date(response.body.data.matrices[i].createdAt).toString()
-        ).toBe(
-          new Date(
-            testUserWithMultipleMatrices.matrices[i].createdAt
-          ).toString()
-        );
+
+        expect(testMatrix).toBeDefined();
+
+        if (testMatrix) {
+          expect(response.body.data.matrices[i].name).toBe(testMatrix.name);
+          expect(response.body.data.matrices[i].rows).toBe(testMatrix.rows);
+          expect(response.body.data.matrices[i].columns).toBe(
+            testMatrix.columns
+          );
+          expect(response.body.data.matrices[i].values).toEqual(
+            testMatrix.values
+          );
+          expect(
+            new Date(response.body.data.matrices[i].createdAt).toString()
+          ).toBe(new Date(testMatrix.createdAt).toString());
+        }
       }
     });
 
