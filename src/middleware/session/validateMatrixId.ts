@@ -23,6 +23,7 @@ const validateMatrixId = async (
       } as ValidationError;
       return next(REQUEST_VALIDATION_ERROR([validationError]));
     }
+
     next();
   } catch (err) {
     next(INTERNAL_SERVER_ERROR);

@@ -1,7 +1,7 @@
-interface VotingInfo {
+interface VotingData {
   id: number;
   name: string;
   active: boolean;
 }
 
-export default VotingInfo;
+export default VotingData;

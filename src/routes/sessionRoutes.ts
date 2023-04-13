@@ -1,29 +1,40 @@
 import express from 'express';
 import { checkSchema } from 'express-validator';
 import sessionController from '../controllers/sessionController';
-import authenticateUser from '../middleware/auth/authenticateUser';
+import userAuthentication from '../middleware/auth/userAuthentication';
 import validateSchema from '../middleware/core/validateSchema';
+import authenticateLoggedUser from '../middleware/session/authenticateLoggedUser';
 import createSchema from '../middleware/session/createSchema';
 import createVotingSchema from '../middleware/session/createVotingSchema';
 import validateMatrixId from '../middleware/session/validateMatrixId';
+import validateSessionId from '../middleware/session/validateSessionId';
+import validateOwnership from '../middleware/session/validateOwnership';
 
 const sessionRoutes = express.Router();
 
 sessionRoutes.post(
   '/',
   [
-    authenticateUser,
+    userAuthentication.authenticate,
     validateSchema(checkSchema(createSchema)),
     validateMatrixId,
   ],
   sessionController.create
 );
 
-sessionRoutes.get('/:hashId', sessionController.join);
+sessionRoutes.get(
+  '/:hashId',
+  [validateSessionId, authenticateLoggedUser],
+  sessionController.join
+);
 
 sessionRoutes.post(
   '/:hashId/voting',
-  [authenticateUser, validateSchema(checkSchema(createVotingSchema))],
+  [
+    userAuthentication.authenticate,
+    validateSchema(checkSchema(createVotingSchema)),
+    validateOwnership
+  ],
   sessionController.createVoting
 );
 

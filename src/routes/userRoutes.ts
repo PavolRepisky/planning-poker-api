@@ -1,7 +1,7 @@
 import express from 'express';
 import { checkSchema } from 'express-validator';
 import userController from '../controllers/userController';
-import authenticateUser from '../middleware/auth/authenticateUser';
+import userAuthentication from '../middleware/auth/userAuthentication';
 import validateSchema from '../middleware/core/validateSchema';
 import updatePasswordSchema from '../middleware/user/updatePasswordSchema';
 import updateProfileSchema from '../middleware/user/updateProfileSchema';
@@ -11,14 +11,17 @@ const userRoutes = express.Router();
 
 userRoutes.patch(
   '/profile',
-  [authenticateUser, validateSchema(checkSchema(updateProfileSchema))],
+  [
+    userAuthentication.authenticate,
+    validateSchema(checkSchema(updateProfileSchema)),
+  ],
   userController.updateProfile
 );
 
 userRoutes.patch(
   '/password',
   [
-    authenticateUser,
+    userAuthentication.authenticate,
     validateSchema(checkSchema(updatePasswordSchema)),
     validatePassword,
   ],

@@ -1,7 +1,7 @@
 import express from 'express';
 import { checkSchema } from 'express-validator';
 import matrixController from '../controllers/matrixController';
-import authenticateUser from '../middleware/auth/authenticateUser';
+import userAuthentication from '../middleware/auth/userAuthentication';
 import validateSchema from '../middleware/core/validateSchema';
 import createUpdateSchema from '../middleware/matrix/createUpdateSchema';
 import validateNamelIsAvailable from '../middleware/matrix/validateNameIsAvailable';
@@ -12,7 +12,7 @@ const matrixRoutes = express.Router();
 matrixRoutes.post(
   '/',
   [
-    authenticateUser,
+    userAuthentication.authenticate,
     validateSchema(checkSchema(createUpdateSchema)),
     validateNamelIsAvailable,
   ],
@@ -22,7 +22,7 @@ matrixRoutes.post(
 matrixRoutes.patch(
   '/:id(\\d+)/',
   [
-    authenticateUser,
+    userAuthentication.authenticate,
     validateSchema(checkSchema(createUpdateSchema)),
     validateNamelIsAvailable,
     validateOwnership,
@@ -30,17 +30,17 @@ matrixRoutes.patch(
   matrixController.update
 );
 
-matrixRoutes.get('/', [authenticateUser], matrixController.list);
+matrixRoutes.get('/', [userAuthentication.authenticate], matrixController.list);
 
 matrixRoutes.get(
   '/:id(\\d+)/',
-  [authenticateUser, validateOwnership],
+  [userAuthentication.authenticate, validateOwnership],
   matrixController.view
 );
 
 matrixRoutes.delete(
   '/:id(\\d+)/',
-  [authenticateUser, validateOwnership],
+  [userAuthentication.authenticate, validateOwnership],
   matrixController.remove
 );
 

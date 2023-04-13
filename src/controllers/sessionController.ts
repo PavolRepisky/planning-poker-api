@@ -5,8 +5,8 @@ import HttpCode from '../types/core/httpCode';
 import MATRIX_NOT_FOUND from '../types/core/matrixNotFound';
 import SESSION_NOT_FOUND from '../types/core/sessionNotFound';
 import MatrixData from '../types/matrix/MatrixData';
-import SessionInfo from '../types/session/SessionInfo';
-import VotingInfo from '../types/session/VotingInfo';
+import SessionData from '../types/session/SessionData';
+import VotingData from '../types/session/VotingData';
 import parseMatrixValuesToArray from '../utils/matrix/parseMatrixValuesToArray';
 
 const create = async (
@@ -32,7 +32,7 @@ const create = async (
           name: session.name,
           hashId: session.hashId,
           matrixId: session.matrixId,
-        } as SessionInfo,
+        } as SessionData,
       },
     });
   } catch (error: any) {
@@ -46,7 +46,14 @@ const join = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const session = await sessionService.findByHashId(req.params.hashId);
+    const { hashId } = req.params;
+    const decodedToken = res.locals.token;
+
+    if (decodedToken) {
+      await sessionService.joinSession(hashId, decodedToken.userId);
+    }
+
+    const session = await sessionService.findByHashId(hashId);
     if (!session) {
       throw SESSION_NOT_FOUND;
     }
@@ -64,7 +71,7 @@ const join = async (
           name: session.name,
           hashId: session.hashId,
           matrixId: session.matrixId,
-        } as SessionInfo,
+        } as SessionData,
         matrix: {
           id: matrix.id,
           name: matrix.name,
@@ -86,22 +93,31 @@ const createVoting = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { name } = req.body;
-    const decodedToken = res.locals.token;
+    const { name, description } = req.body;
 
     const session = await sessionService.findByHashId(req.params.hashId);
-    if (!session || session.ownerId !== decodedToken.userId) {
+    if (!session) {
       throw SESSION_NOT_FOUND;
     }
 
     await sessionService.closeVotings(session.id);
 
-    const voting = await sessionService.createVoting(name, true, session.id);
+    const voting = await sessionService.createVoting(
+      name,
+      description,
+      true,
+      session.id
+    );
 
     res.status(HttpCode.CREATED).json({
       message: req.t('session.createVoting.success'),
       data: {
-        voting: { id: voting.id, name, active: voting.active } as VotingInfo,
+        voting: {
+          id: voting.id,
+          name: voting.name,
+          description: voting.description,
+          active: voting.active,
+        } as VotingData,
       },
     });
   } catch (error: any) {

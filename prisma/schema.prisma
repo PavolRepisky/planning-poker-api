@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  firstName String
-  lastName  String
-  email     String    @unique
-  password  String
-  matrices  Matrix[]
-  sessions  Session[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id              String            @id @default(uuid())
+  firstName       String
+  lastName        String
+  email           String            @unique
+  password        String
+  matrices        Matrix[]
+  sessions        Session[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  AttendedSession AttendedSession[]
 
   @@map("users")
 }
@@ -37,28 +38,40 @@ model Matrix {
 }
 
 model Session {
-  id        Int      @id @default(autoincrement())
-  hashId    String   @unique @default(uuid())
-  name      String
-  matrix    Matrix   @relation(fields: [matrixId], references: [id], onDelete: Cascade)
-  matrixId  Int
-  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId   String
-  votings   Voting[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              Int               @id @default(autoincrement())
+  hashId          String            @unique @default(uuid())
+  name            String
+  matrix          Matrix            @relation(fields: [matrixId], references: [id], onDelete: Cascade)
+  matrixId        Int
+  owner           User              @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId         String
+  votings         Voting[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  AttendedSession AttendedSession[]
 
   @@map("sessions")
 }
 
+model AttendedSession {
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  session       Session @relation(fields: [sessionHashId], references: [hashId], onDelete: Cascade)
+  sessionHashId String
+
+  @@unique([userId, sessionHashId])
+  @@map("attended_sessions")
+}
+
 model Voting {
-  id        Int      @id @default(autoincrement())
-  name      String
-  active    Boolean
-  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  sessionId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  active      Boolean
+  session     Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId   Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("votings")
 }
