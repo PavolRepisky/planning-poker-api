@@ -7,8 +7,8 @@ import authenticateLoggedUser from '../middleware/session/authenticateLoggedUser
 import createSchema from '../middleware/session/createSchema';
 import createVotingSchema from '../middleware/session/createVotingSchema';
 import validateMatrixId from '../middleware/session/validateMatrixId';
-import validateSessionId from '../middleware/session/validateSessionId';
 import validateOwnership from '../middleware/session/validateOwnership';
+import validateSessionId from '../middleware/session/validateSessionId';
 
 const sessionRoutes = express.Router();
 
@@ -33,7 +33,7 @@ sessionRoutes.post(
   [
     userAuthentication.authenticate,
     validateSchema(checkSchema(createVotingSchema)),
-    validateOwnership
+    validateOwnership,
   ],
   sessionController.createVoting
 );

@@ -24,8 +24,13 @@ const SERVER = {
   },
 };
 
+const CLIENT = {
+  host: process.env.CLIENT_HOST ?? 'http://localhost:3001'
+}
+
 const config = {
   server: SERVER,
+  client: CLIENT 
 };
 
 export default config;

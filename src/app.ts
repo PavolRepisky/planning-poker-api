@@ -2,6 +2,7 @@ import * as cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import * as http from 'http';
 import morgan from 'morgan';
+import SocketServer from './classes/session/SocketServer';
 import i18NextSetup from './config/i18n';
 import authRoutes from './routes/authRoutes';
 import matrixRoutes from './routes/matrixRoutes';
@@ -9,11 +10,10 @@ import sessionRoutes from './routes/sessionRoutes';
 import userRoutes from './routes/userRoutes';
 import HttpCode from './types/core/httpCode';
 import RequestError from './types/core/requestError';
-import { setupSocketServer } from './utils/session/socketManager';
 
 const app = express();
 const server = http.createServer(app);
-setupSocketServer(server);
+const socketServer = SocketServer.getInstance(server);
 
 /* Request body parsing */
 app.use(express.json());

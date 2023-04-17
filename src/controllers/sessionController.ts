@@ -32,6 +32,7 @@ const create = async (
           name: session.name,
           hashId: session.hashId,
           matrixId: session.matrixId,
+          ownerId: session.ownerId,
         } as SessionData,
       },
     });
@@ -71,6 +72,7 @@ const join = async (
           name: session.name,
           hashId: session.hashId,
           matrixId: session.matrixId,
+          ownerId: session.ownerId,
         } as SessionData,
         matrix: {
           id: matrix.id,

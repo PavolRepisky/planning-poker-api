@@ -12,6 +12,7 @@ const generateTestSession = async (
     id: session.id,
     hashId: session.hashId,
     name: session.name,
+    ownerId: session.ownerId,
   } as SessionData;
 };
 

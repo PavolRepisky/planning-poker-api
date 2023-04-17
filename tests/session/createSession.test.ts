@@ -75,6 +75,7 @@ describe('POST /sessions', () => {
       expect(typeof response.body.data.session.id).toBe('number');
       expect(typeof response.body.data.session.hashId).toBe('string');
       expect(response.body.data.session.name).toBe(requestBody.name);
+      expect(response.body.data.session.ownerId).toBe(data.user.id);
     });
   });
 

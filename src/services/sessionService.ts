@@ -1,5 +1,5 @@
 import { AttendedSession, Session, Voting } from '@prisma/client';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import prisma from '../config/client';
 
 const create = (
