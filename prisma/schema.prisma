@@ -8,16 +8,18 @@ datasource db {
 }
 
 model User {
-  id              String            @id @default(uuid())
-  firstName       String
-  lastName        String
-  email           String            @unique
-  password        String
-  matrices        Matrix[]
-  sessions        Session[]
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  AttendedSession AttendedSession[]
+  id               String            @id @default(uuid())
+  firstName        String
+  lastName         String
+  email            String            @unique
+  password         String
+  accountStatus    AccountStatus     @default(PENDING)
+  confirmationCode String            @unique @default(uuid())
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  matrices         Matrix[]
+  sessions         Session[]
+  AttendedSession  AttendedSession[]
 
   @@map("users")
 }
@@ -74,4 +76,9 @@ model Voting {
   updatedAt   DateTime @updatedAt
 
   @@map("votings")
+}
+
+enum AccountStatus {
+  PENDING
+  ACTIVE
 }

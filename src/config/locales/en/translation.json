@@ -41,6 +41,9 @@
     },
     "getUser": {
       "success": "User data has been retrieved successfully"
+    },
+    "account": {
+      "success": "Account has been activated successfully"
     }
   },
   "user": {

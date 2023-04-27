@@ -22,6 +22,8 @@ authRoutes.post(
   authController.login
 );
 
+authRoutes.get('/confirm-email/:confirmationCode', authController.confirmEmail);
+
 authRoutes.get('/me', [userAuthentication.authenticate], authController.getUser);
 
 export default authRoutes;

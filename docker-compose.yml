@@ -17,7 +17,7 @@ services:
       - .env.development
 
   db:
-    image: postgres:15-alpine
+    image: postgres:latest
     container_name: db
     ports:
       - 6000:5432
@@ -27,7 +27,7 @@ services:
       - db-data:/var/lib/postgresql/data
 
   db-test:
-    image: postgres:15-alpine
+    image: postgres:latest
     container_name: db-test
     ports:
       - 6001:5432
