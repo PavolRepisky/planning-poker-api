@@ -1,4 +1,5 @@
 import * as cors from 'cors';
+import { config } from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import * as http from 'http';
 import morgan from 'morgan';
