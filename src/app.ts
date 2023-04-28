@@ -1,16 +1,20 @@
 import * as cors from 'cors';
-import { config } from 'dotenv';
+import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import * as http from 'http';
 import morgan from 'morgan';
 import SocketServer from './classes/session/SocketServer';
-import i18NextSetup from './config/i18n';
 import authRoutes from './routes/authRoutes';
 import matrixRoutes from './routes/matrixRoutes';
 import sessionRoutes from './routes/sessionRoutes';
 import userRoutes from './routes/userRoutes';
 import HttpCode from './types/core/httpCode';
 import RequestError from './types/core/requestError';
+import i18next from './utils/i18next';
+import validateEnv from './utils/validateEnv';
+
+dotenv.config();
+validateEnv();
 
 const app = express();
 const server = http.createServer(app);
@@ -23,7 +27,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 /* Localization */
-app.use(i18NextSetup);
+app.use(i18next);
 
 /* Socket IO */
 app.use(cors.default());
@@ -35,7 +39,10 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Methods',
     'OPTIONS, GET, POST, PUT, PATCH, DELETE'
   );
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization, Accept-language'
+  );
   next();
 });
 

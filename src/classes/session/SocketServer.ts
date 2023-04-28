@@ -1,6 +1,6 @@
 import * as http from 'http';
 import * as socketIO from 'socket.io';
-import config from '../../config/config';
+import {oldConfig} from '../../config/config';
 import SocketSessionJoinUserData from '../../types/session/SocketSessionJoinUserData';
 import SocketSessionUserVoteData from '../../types/session/SocketSessionUserVoteData';
 import SocketVotingData from '../../types/session/SocketVotingData';
@@ -14,7 +14,7 @@ class SocketServer {
   constructor(server: http.Server) {
     this.io = new socketIO.Server(server, {
       cors: {
-        origin: [config.client.host],
+        origin: [oldConfig.client.host],
       },
     });
     this.setupConnection();
