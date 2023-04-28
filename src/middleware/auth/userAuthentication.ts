@@ -1,8 +1,6 @@
-import { AccountStatus } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import config from '../../config/config';
-import userService from '../../services/userService';
+import { oldConfig } from '../../config/config';
 import USER_UNAUTHORIZED from '../../types/core/userUnauthorized';
 
 const extractAuthorizationTokenFromHeaders = (req: Request): string | null => {
@@ -17,7 +15,7 @@ const decodeAuthorizationToken = async (
   token: string
 ): Promise<jwt.JwtPayload | null> => {
   try {
-    const decodedToken = await jwt.verify(token, config.server.token.secret);
+    const decodedToken = await jwt.verify(token, oldConfig.server.token.secret);
     if (typeof decodedToken === 'string') {
       return null;
     }

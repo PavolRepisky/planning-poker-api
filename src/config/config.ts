@@ -2,9 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || 'localhost';
 const SERVER_HOST = process.env.SERVER_HOST || 'localhost';
-const SERVER_PORT = Number(process.env.SERVER_PORT || 3000);
 const SERVER_TOKEN_EXPIRETIME = Number(
   process.env.SERVER_TOKEN_EXPIRETIME || 3600
 );
@@ -16,8 +14,6 @@ const SERVER_PASSWORD = process.env.SERVER_PASSWORD ?? '';
 
 const SERVER = {
   host: SERVER_HOST,
-  hostname: SERVER_HOSTNAME,
-  port: SERVER_PORT,
   token: {
     expireTime: SERVER_TOKEN_EXPIRETIME,
     issuer: SERVER_TOKEN_ISSUER,
@@ -34,9 +30,12 @@ const CLIENT = {
   host: process.env.CLIENT_HOST ?? 'http://localhost:3001',
 };
 
-const config = {
+export const oldConfig = {
   server: SERVER,
   client: CLIENT,
 };
 
-export default config;
+export default {
+  port: Number(process.env.PORT),
+  nodeEnv: process.env.NODE_ENV,
+};

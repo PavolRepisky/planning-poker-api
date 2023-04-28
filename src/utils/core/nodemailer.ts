@@ -1,4 +1,4 @@
-import config from '../../config/config';
+import {oldConfig} from '../../config/config';
 import transport from '../../config/nodemailer.config';
 
 const sendConfirmationEmail = async (
@@ -7,7 +7,7 @@ const sendConfirmationEmail = async (
 ) => {
   try {
     await transport.sendMail({
-      from: config.server.email,
+      from: oldConfig.server.email,
       to: email,
       subject: 'Email Confirmation',
       html: `<!DOCTYPE html>
@@ -188,7 +188,7 @@ const sendConfirmationEmail = async (
                       <p style="margin: 0">
                         Tap the button below to confirm your email address. If you
                         didn't create an account with
-                        <a href="${config.server.host}">App Name</a>, you can safely
+                        <a href="${oldConfig.server.host}">App Name</a>, you can safely
                         delete this email.
                       </p>
                     </td>
@@ -209,7 +209,7 @@ const sendConfirmationEmail = async (
                                   style="border-radius: 6px"
                                 >
                                   <a
-                                    href="${config.server.host}/confirm-email/${confirmationCode}"
+                                    href="${oldConfig.server.host}/confirm-email/${confirmationCode}"
                                     target="_blank"
                                     style="
                                       display: inline-block;
@@ -251,8 +251,8 @@ const sendConfirmationEmail = async (
                         your browser:
                       </p>
                       <p style="margin: 0">
-                        <a href="${config.server.host}/confirm-email/${confirmationCode}" target="_blank"
-                          >${config.server.host}/confirm-email/${confirmationCode}</a
+                        <a href="${oldConfig.server.host}/confirm-email/${confirmationCode}" target="_blank"
+                          >${oldConfig.server.host}/confirm-email/${confirmationCode}</a
                         >
                       </p>
                     </td>
