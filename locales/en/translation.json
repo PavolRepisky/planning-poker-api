@@ -45,7 +45,11 @@
   "email": {
     "verify": {
       "subject": "Verify your e-mail"
-    }
+    },
+    "reset": {
+      "subject": "Reset your password"
+    },
+    "fail": "There was an error sending email"
   },
   "auth": {
     "register": {
@@ -61,7 +65,10 @@
       "success": "User has been logged out successfully"
     },
     "verify": {
-      "success": "E-mail has been successfully verified"
+      "success": "E-mail has been verified successfully"
+    },
+    "forgot": {
+      "success": "Password reset e-mail has been sent successfully"
     }
   },
   "user": {

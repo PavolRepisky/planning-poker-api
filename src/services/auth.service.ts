@@ -52,3 +52,13 @@ export const updateUser = async (
 ) => {
   return (await prisma.user.update({ where, data, select })) as User;
 };
+
+export const findUser = async (
+  where: Partial<Prisma.UserWhereInput>,
+  select?: Prisma.UserSelect
+) => {
+  return (await prisma.user.findFirst({
+    where,
+    select,
+  })) as User;
+};

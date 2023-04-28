@@ -1,15 +1,19 @@
 import { Prisma } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import config from 'config';
+import crypto from 'crypto';
 import { CookieOptions, NextFunction, Request, Response } from 'express';
 import {
+  ForgotPasswordBody,
   LoginRequestBody,
   RegisterRequestBody,
+  ResetPasswordInput,
   VerifyEmailRequestParams,
 } from '../schemas/auth.schema';
 import {
   createUser,
   findUniqueUser,
+  findUser,
   removeUser,
   signTokens,
   updateUser,
@@ -191,15 +195,19 @@ export const refreshAccessToken = async (
   }
 };
 
+const logout = (res: Response) => {
+  res.cookie('access_token', '', { maxAge: 1 });
+  res.cookie('refresh_token', '', { maxAge: 1 });
+  res.cookie('logged_in', '', { maxAge: 1 });
+};
+
 export const logoutUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    res.cookie('access_token', '', { maxAge: -1 });
-    res.cookie('refresh_token', '', { maxAge: -1 });
-    res.cookie('logged_in', '', { maxAge: -1 });
+    logout(res);
 
     res.status(HttpCode.OK).json({
       message: req.t('auth.logout.success'),
@@ -226,6 +234,113 @@ export const verifyEmail = async (
     if (err.code === 'P2025') {
       return next(USER_NOT_FOUND);
     }
+    next(err);
+  }
+};
+
+export const forgotPassword = async (
+  req: Request<
+    Record<string, never>,
+    Record<string, never>,
+    ForgotPasswordBody
+  >,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await findUniqueUser({ email: req.body.email.toLowerCase() });
+
+    if (!user) {
+      throw USER_NOT_FOUND;
+    }
+
+    if (!user.verified) {
+      throw USER_UNAUTHORIZED;
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const passwordResetToken = crypto
+      .createHash('sha256')
+      .update(resetToken)
+      .digest('hex');
+
+    await updateUser(
+      { id: user.id },
+      {
+        passwordResetToken,
+        passwordResetAt: new Date(Date.now() + 10 * 60 * 1000),
+      },
+      { email: true }
+    );
+
+    try {
+      const url = `${config.get<string>(
+        'origin'
+      )}/reset-password/${resetToken}`;
+      await new Email(user, url).sendPasswordResetToken(req);
+
+      res.status(HttpCode.OK).json({
+        message: req.t('auth.forgot.success'),
+      });
+    } catch (err: any) {
+      await updateUser(
+        { id: user.id },
+        { passwordResetToken: null, passwordResetAt: null },
+        {}
+      );
+      throw err;
+    }
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export const resetPassword = async (
+  req: Request<
+    ResetPasswordInput['params'],
+    Record<string, never>,
+    ResetPasswordInput['body']
+  >,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const passwordResetToken = crypto
+      .createHash('sha256')
+      .update(req.params.resetToken)
+      .digest('hex');
+
+    const user = await findUser({
+      passwordResetToken,
+      passwordResetAt: {
+        gt: new Date(),
+      },
+    });
+
+    if (!user) {
+      throw USER_NOT_FOUND;
+    }
+
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+
+    await updateUser(
+      {
+        id: user.id,
+      },
+      {
+        password: hashedPassword,
+        passwordResetToken: null,
+        passwordResetAt: null,
+      },
+      { email: true }
+    );
+
+    logout(res);
+    res.status(200).json({
+      status: 'success',
+      message: 'Password data updated successfully',
+    });
+  } catch (err: any) {
     next(err);
   }
 };

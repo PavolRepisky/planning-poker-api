@@ -52,11 +52,12 @@ export default class Email {
   }
 
   async sendVerificationCode(req: Request) {
-    await this.send(
-      `verificationCode_${
-        req.headers['accept-language']?.toLowerCase() ?? 'en'
-      }`,
-      req.t('email.verify.subject')
-    );
+    const lang = req.headers['accept-language']?.toLowerCase() ?? 'en';
+    await this.send(`verificationCode_${lang}`, req.t('email.verify.subject'));
+  }
+
+  async sendPasswordResetToken(req: Request) {
+    const lang = req.headers['accept-language']?.toLowerCase() ?? 'en';
+    await this.send(`resetPassword_${lang}`, req.t('email.reset.subject'));
   }
 }
