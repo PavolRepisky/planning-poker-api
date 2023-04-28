@@ -10,14 +10,8 @@ import {
   ResetPasswordInput,
   VerifyEmailRequestParams,
 } from '../schemas/auth.schema';
-import {
-  createUser,
-  findUniqueUser,
-  findUser,
-  removeUser,
-  signTokens,
-  updateUser,
-} from '../services/auth.service';
+import { createUser, removeUser, signTokens } from '../services/auth.service';
+import { findUniqueUser, findUser, updateUser } from '../services/user.service';
 import HttpCode from '../types/HttpCode';
 import USER_NOT_FOUND from '../types/errors/UserNotFound';
 import USER_UNAUTHORIZED from '../types/errors/UserUnauthorized';

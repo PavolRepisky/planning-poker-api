@@ -75,12 +75,11 @@
     "get": {
       "success": "User has been retrieved successfully"
     },
-
-    "passwordUpdate": {
-      "success": "Password has been changed successfully"
-    },
-    "nameUpdate": {
+    "changeName": {
       "success": "Name has been changed successfully"
+    },
+    "changePassword": {
+      "success": "Password has been changed successfully"
     }
   },
   "matrix": {

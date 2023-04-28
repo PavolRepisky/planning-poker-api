@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import * as lodash from 'lodash';
-import { excludedFields, findUniqueUser } from '../services/auth.service';
+import { excludedFields } from '../services/auth.service';
+import { findUniqueUser } from '../services/user.service';
 import USER_UNAUTHORIZED from '../types/errors/UserUnauthorized';
 import { verifyJwt } from '../utils/jwt';
 
