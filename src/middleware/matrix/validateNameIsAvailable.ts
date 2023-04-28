@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { ValidationError } from 'express-validator';
 import matrixService from '../../services/matrixService';
-import INTERNAL_SERVER_ERROR from '../../types/core/internalServerError';
-import REQUEST_VALIDATION_ERROR from '../../types/core/requestValidationError';
+import INTERNAL_SERVER_ERROR from '../../types/errors/InternalServerError';
+import REQUEST_VALIDATION_ERROR from '../../types/errors/RequestValidationError';
 
 const validateNamelIsAvailable = async (
   req: Request,

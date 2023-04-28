@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { oldConfig } from '../../config/config';
-import USER_UNAUTHORIZED from '../../types/core/userUnauthorized';
+import USER_UNAUTHORIZED from '../../types/errors/UserUnauthorized';
 
 const extractAuthorizationTokenFromHeaders = (req: Request): string | null => {
   const token = req.headers.authorization?.split(' ')[1];

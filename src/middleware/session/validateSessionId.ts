@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import sessionService from '../../services/sessionService';
-import INTERNAL_SERVER_ERROR from '../../types/core/internalServerError';
 import SESSION_NOT_FOUND from '../../types/core/sessionNotFound';
+import INTERNAL_SERVER_ERROR from '../../types/errors/InternalServerError';
 
 const validateSessionId = async (
   req: Request,

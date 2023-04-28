@@ -1,28 +1,38 @@
 {
   "common": {
     "errors": {
+      "internal": "Internal server error",
+      "validation": "Request validation failed",
       "user": {
         "notFound": "User not found",
         "unauthorized": "User unauthorized"
       },
+      "route": {
+        "notFound": "Route not found"
+      },
+
       "matrix": {
         "notFound": "Matrix not found"
       },
       "session": {
         "notFound": "Session not found"
-      },
-      "internal": "Internal server error",
-      "requestValidation": "Request validation failed"
+      }
     },
     "validations": {
-      "email": "Invalid email address",
-      "uniqueEmail": "Email is already taken",
-      "password": "Must be at least 8 characters, must contain a lower and upper case letter and a digit",
+      "required": "The field is required",
+      "string": {
+        "maxLength": "Value must be at most 50 characters long"
+      },
+      "email": {
+        "invalid": "E-mail address is invalid",
+        "taken": "E-mail address is already in use"
+      },
+      "password": {
+        "weak": "Password must be at least 8 characters, contain a lower and upper case letter and a digit",
+        "match": "Passwords must match"
+      },
+
       "passwordsMatch": "Passwords does not match",
-      "nameLength": "Must be between 3 and 50 characters long",
-      "max": "Must be {{size}} characters or less",
-      "min": "Must be {{size}} characters or more",
-      "required": "Required",
       "matrixSize": "Must be an integer greater than 1",
       "twoDimStringArray": "Must be two dimensional string array",
       "uniqueValues": "Must contain unique values only",
@@ -32,6 +42,11 @@
       "matrixId": "Wrong matrix id"
     }
   },
+  "email": {
+    "verify": {
+      "subject": "Verify your e-mail"
+    }
+  },
   "auth": {
     "register": {
       "success": "Account has been created successfully"
@@ -39,14 +54,21 @@
     "login": {
       "success": "User authenticated successfully"
     },
-    "getUser": {
-      "success": "User data has been retrieved successfully"
+    "refresh": {
+      "success": "Token has been refreshed successfully"
     },
-    "account": {
-      "success": "Account has been activated successfully"
+    "logout": {
+      "success": "User has been logged out successfully"
+    },
+    "verify": {
+      "success": "E-mail has been successfully verified"
     }
   },
   "user": {
+    "get": {
+      "success": "User has been retrieved successfully"
+    },
+
     "passwordUpdate": {
       "success": "Password has been changed successfully"
     },

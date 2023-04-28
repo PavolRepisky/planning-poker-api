@@ -2,10 +2,10 @@ import express from 'express';
 import { checkSchema } from 'express-validator';
 import matrixController from '../controllers/matrixController';
 import userAuthentication from '../middleware/auth/userAuthentication';
-import validateSchema from '../middleware/core/validateSchema';
 import createUpdateSchema from '../middleware/matrix/createUpdateSchema';
 import validateNamelIsAvailable from '../middleware/matrix/validateNameIsAvailable';
 import validateOwnership from '../middleware/matrix/validateOwnership';
+import validateSchema from '../middleware/validateSchema';
 
 const matrixRoutes = express.Router();
 

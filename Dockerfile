@@ -14,6 +14,8 @@ COPY . .
 
 RUN npm run build
 
+COPY "src/views" "./dist/views"
+
 EXPOSE 3000
 
 CMD [ "npm", "start" ]

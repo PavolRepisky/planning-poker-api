@@ -1,15 +1,15 @@
-import * as cors from 'cors';
+import config from 'config';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import * as http from 'http';
 import morgan from 'morgan';
 import SocketServer from './classes/session/SocketServer';
-import authRoutes from './routes/authRoutes';
-import matrixRoutes from './routes/matrixRoutes';
-import sessionRoutes from './routes/sessionRoutes';
-import userRoutes from './routes/userRoutes';
-import HttpCode from './types/core/httpCode';
-import RequestError from './types/core/requestError';
+import authRouter from './routes/auth.routes';
+import userRouter from './routes/user.routes';
+import HttpCode from './types/HttpCode';
+import RequestError from './types/errors/RequestError';
 import i18next from './utils/i18next';
 import validateEnv from './utils/validateEnv';
 
@@ -20,39 +20,41 @@ const app = express();
 const server = http.createServer(app);
 const socketServer = SocketServer.getInstance(server);
 
+/* Template engine */
+app.set('view engine', 'pug');
+app.set('views', `${__dirname}/views`);
+
 /* Request body parsing */
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
 
-/* Logging */
-app.use(morgan('dev'));
+/* Request cookie parsing */
+app.use(cookieParser());
 
-console.log(process.env.POSTGRES_PORT);
+/* Cors */
+app.use(
+  cors({
+    origin: [config.get<string>('origin')],
+    credentials: true,
+  })
+);
 
 /* Localization */
 app.use(i18next);
 
-/* Socket IO */
-app.use(cors.default());
-
-/* API Rules */
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'OPTIONS, GET, POST, PUT, PATCH, DELETE'
-  );
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Authorization, Accept-language'
-  );
-  next();
-});
+/* Logging */
+if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 /* Routes */
-app.use(authRoutes);
-app.use('/users', userRoutes);
-app.use('/matrices', matrixRoutes);
-app.use('/sessions', sessionRoutes);
+app.use(authRouter);
+app.use('/users', userRouter);
+app.all('*', (req: Request, res: Response, next: NextFunction) => {
+  next(
+    new RequestError({
+      statusCode: HttpCode.NOT_FOUND,
+      message: 'common.errors.route.notFound',
+    })
+  );
+});
 
 /* Error handling */
 app.use(
@@ -64,7 +66,7 @@ app.use(
   ) => {
     if (err instanceof RequestError) {
       return res.status(err.statusCode).json({
-        message: req.t(err.message as any),
+        message: req.t(err.message),
         errors: err.errors,
       });
     }

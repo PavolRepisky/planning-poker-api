@@ -1,5 +1,5 @@
 import { Schema } from 'express-validator';
-import passwordRegex from '../../types/auth/passwordRegex';
+import passwordRegex from '../../utils/passwordRegex';
 
 const updatePasswordSchema: Schema = {
   password: {

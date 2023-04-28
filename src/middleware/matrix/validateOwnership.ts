@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import matrixService from '../../services/matrixService';
-import INTERNAL_SERVER_ERROR from '../../types/core/internalServerError';
 import MATRIX_NOT_FOUND from '../../types/core/matrixNotFound';
-import USER_UNAUTHORIZED from '../../types/core/userUnauthorized';
+import INTERNAL_SERVER_ERROR from '../../types/errors/InternalServerError';
+import USER_UNAUTHORIZED from '../../types/errors/UserUnauthorized';
 
 const validateOwnership = async (
   req: Request,

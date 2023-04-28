@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import matrixService from '../services/matrixService';
 import sessionService from '../services/sessionService';
-import HttpCode from '../types/core/httpCode';
+import HttpCode from '../types/HttpCode';
 import MATRIX_NOT_FOUND from '../types/core/matrixNotFound';
 import SESSION_NOT_FOUND from '../types/core/sessionNotFound';
 import MatrixData from '../types/matrix/MatrixData';

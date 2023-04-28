@@ -1,0 +1,15 @@
+extends base
+
+block content
+  p Ahoj #{firstName},
+  p Potvrď prosím svoju e-mail, aby si sa mohol prihlásiť
+  table.btn.btn-primary(role='presentation' border='0' cellpadding='0' cellspacing='0')
+    tbody
+      tr
+        td(align='left')
+          table(role='presentation' border='0' cellpadding='0' cellspacing='0')
+            tbody
+              tr
+                td
+                  a(href=`${url}` target='_blank') Potvrdiť E-mail
+  p S Pozdravom!

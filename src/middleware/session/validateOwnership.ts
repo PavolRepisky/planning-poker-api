@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import sessionService from '../../services/sessionService';
-import INTERNAL_SERVER_ERROR from '../../types/core/internalServerError';
 import SESSION_NOT_FOUND from '../../types/core/sessionNotFound';
-import USER_UNAUTHORIZED from '../../types/core/userUnauthorized';
+import INTERNAL_SERVER_ERROR from '../../types/errors/InternalServerError';
+import USER_UNAUTHORIZED from '../../types/errors/UserUnauthorized';
 
 const validateOwnership = async (
   req: Request,

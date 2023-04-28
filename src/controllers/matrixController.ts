@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import matrixService from '../services/matrixService';
-import HttpCode from '../types/core/httpCode';
+import HttpCode from '../types/HttpCode';
 import MATRIX_NOT_FOUND from '../types/core/matrixNotFound';
 import MatrixData from '../types/matrix/MatrixData';
 import parseMatrixValuesToArray from '../utils/matrix/parseMatrixValuesToArray';

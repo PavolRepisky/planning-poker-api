@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import userService from '../services/userService';
-import HttpCode from '../types/core/httpCode';
-import USER_NOT_FOUND from '../types/core/userNotFound';
+import HttpCode from '../types/HttpCode';
+import USER_NOT_FOUND from '../types/errors/UserNotFound';
 import UserData from '../types/user/userData';
 
 const updateProfile = async (
@@ -48,7 +48,7 @@ const updatePassword = async (
     const decodedToken = res.locals.token;
     const { newPassword } = req.body;
 
-    await userService.updatePassword(decodedToken.userId, newPassword);
+    // await userService.updatePassword(decodedToken.userId, newPassword);
 
     res.status(HttpCode.OK).json({
       message: req.t('user.passwordUpdate.success'),

@@ -1,8 +1,8 @@
 import { User } from '@prisma/client';
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library';
 import prisma from '../config/client';
-import USER_NOT_FOUND from '../types/core/userNotFound';
-import hashPassword from '../utils/auth/hashPassword';
+import USER_NOT_FOUND from '../types/errors/UserNotFound';
+// import hashPassword from '../utils/auth/hashPassword';
 
 const findById = async (id: string): Promise<User | null> => {
   const user = await prisma.user.findUnique({
@@ -33,27 +33,27 @@ const findByEmail = async (email: string): Promise<User | null> => {
   return user;
 };
 
-const updatePassword = async (
-  id: string,
-  password: string
-): Promise<User | null> => {
-  try {
-    const updatedUser = await prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        password: hashPassword(password),
-      },
-    });
-    return updatedUser;
-  } catch (err: any) {
-    if (err instanceof PrismaClientUnknownRequestError) {
-      throw USER_NOT_FOUND;
-    }
-    throw err;
-  }
-};
+// const updatePassword = async (
+//   id: string,
+//   password: string
+// ): Promise<User | null> => {
+//   try {
+//     const updatedUser = await prisma.user.update({
+//       where: {
+//         id,
+//       },
+//       data: {
+//         password: hashPassword(password),
+//       },
+//     });
+//     return updatedUser;
+//   } catch (err: any) {
+//     if (err instanceof PrismaClientUnknownRequestError) {
+//       throw USER_NOT_FOUND;
+//     }
+//     throw err;
+//   }
+// };
 
 const updateName = async (
   id: string,
@@ -99,7 +99,6 @@ export default {
   findById,
   // findByConfirmationCode,
   findByEmail,
-  updatePassword,
   updateName,
   // activateAccount,
 };
