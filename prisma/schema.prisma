@@ -8,18 +8,20 @@ datasource db {
 }
 
 model User {
-  id               String            @id @default(uuid())
-  firstName        String
-  lastName         String
-  email            String            @unique
-  password         String
-  accountStatus    AccountStatus     @default(PENDING)
-  confirmationCode String            @unique @default(uuid())
+  id        String @id @default(uuid())
+  firstName String @db.VarChar(50)
+  lastName  String @db.VarChar(50)
+  email     String @unique
+  password  String
+
+  verified         Boolean @default(false)
+  verificationCode String  @unique @default(uuid())
+
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
+
   matrices         Matrix[]
   sessions         Session[]
-  AttendedSession  AttendedSession[]
 
   @@map("users")
 }
@@ -50,19 +52,8 @@ model Session {
   votings         Voting[]
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
-  AttendedSession AttendedSession[]
 
   @@map("sessions")
-}
-
-model AttendedSession {
-  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String
-  session       Session @relation(fields: [sessionHashId], references: [hashId], onDelete: Cascade)
-  sessionHashId String
-
-  @@unique([userId, sessionHashId])
-  @@map("attended_sessions")
 }
 
 model Voting {
@@ -76,9 +67,4 @@ model Voting {
   updatedAt   DateTime @updatedAt
 
   @@map("votings")
-}
-
-enum AccountStatus {
-  PENDING
-  ACTIVE
 }

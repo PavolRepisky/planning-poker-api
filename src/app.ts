@@ -26,6 +26,8 @@ app.use(express.json());
 /* Logging */
 app.use(morgan('dev'));
 
+console.log(process.env.POSTGRES_PORT);
+
 /* Localization */
 app.use(i18next);
 

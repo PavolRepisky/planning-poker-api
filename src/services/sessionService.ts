@@ -1,4 +1,4 @@
-import { AttendedSession, Session, Voting } from '@prisma/client';
+import { Session, Voting } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import prisma from '../config/client';
 
@@ -40,37 +40,6 @@ const createVoting = (
   });
 };
 
-const joinSession = async (
-  sessionHashId: string,
-  userId: string
-): Promise<void> => {
-  try {
-    await prisma.attendedSession.create({
-      data: {
-        sessionHashId,
-        userId,
-      },
-    });
-  } catch (err) {
-    if (err instanceof PrismaClientKnownRequestError) {
-      if (err.code === 'P2002') {
-        return;
-      }
-    }
-    throw err;
-  }
-};
-
-const findUserAttendedSessions = async (
-  userId: string
-): Promise<AttendedSession[]> => {
-  return await prisma.attendedSession.findMany({
-    where: {
-      userId,
-    },
-  });
-};
-
 const closeVotings = async (sessionId: number): Promise<number> => {
   const votings = await prisma.voting.updateMany({
     where: {
@@ -96,8 +65,6 @@ export default {
   create,
   findByHashId,
   createVoting,
-  joinSession,
   closeVotings,
-  findUserAttendedSessions,
   findVotingsBySessionId,
 };

@@ -50,10 +50,6 @@ const join = async (
     const { hashId } = req.params;
     const decodedToken = res.locals.token;
 
-    if (decodedToken) {
-      await sessionService.joinSession(hashId, decodedToken.userId);
-    }
-
     const session = await sessionService.findByHashId(hashId);
     if (!session) {
       throw SESSION_NOT_FOUND;

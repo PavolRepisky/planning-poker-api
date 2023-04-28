@@ -1,4 +1,4 @@
-import { AccountStatus, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library';
 import prisma from '../config/client';
 import USER_NOT_FOUND from '../types/core/userNotFound';
@@ -13,16 +13,16 @@ const findById = async (id: string): Promise<User | null> => {
   return user;
 };
 
-const findByConfirmationCode = async (
-  confirmationCode: string
-): Promise<User | null> => {
-  const user = await prisma.user.findUnique({
-    where: {
-      confirmationCode,
-    },
-  });
-  return user;
-};
+// const findByConfirmationCode = async (
+//   confirmationCode: string
+// ): Promise<User | null> => {
+//   const user = await prisma.user.findUnique({
+//     where: {
+//       confirmationCode,
+//     },
+//   });
+//   return user;
+// };
 
 const findByEmail = async (email: string): Promise<User | null> => {
   const user = await prisma.user.findUnique({
@@ -79,27 +79,27 @@ const updateName = async (
   }
 };
 
-const activateAccount = async (id: string): Promise<boolean> => {
-  try {
-    await prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        accountStatus: AccountStatus.ACTIVE,
-      },
-    });
-    return true;
-  } catch {
-    return false;
-  }
-};
+// const activateAccount = async (id: string): Promise<boolean> => {
+//   try {
+//     await prisma.user.update({
+//       where: {
+//         id,
+//       },
+//       data: {
+//         accountStatus: AccountStatus.ACTIVE,
+//       },
+//     });
+//     return true;
+//   } catch {
+//     return false;
+//   }
+// };
 
 export default {
   findById,
-  findByConfirmationCode,
+  // findByConfirmationCode,
   findByEmail,
   updatePassword,
   updateName,
-  activateAccount,
+  // activateAccount,
 };

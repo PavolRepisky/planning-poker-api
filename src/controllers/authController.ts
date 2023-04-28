@@ -1,11 +1,8 @@
-import { AccountStatus } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import authService from '../services/authService';
 import userService from '../services/userService';
 import HttpCode from '../types/core/httpCode';
-import INTERNAL_SERVER_ERROR from '../types/core/internalServerError';
 import USER_NOT_FOUND from '../types/core/userNotFound';
-import USER_UNAUTHORIZED from '../types/core/userUnauthorized';
 import UserData from '../types/user/userData';
 import signToken from '../utils/auth/signToken';
 import sendConfirmationEmail from '../utils/core/nodemailer';
@@ -25,7 +22,7 @@ const register = async (
       password
     );
 
-    await sendConfirmationEmail(user.email, user.confirmationCode);
+    // await sendConfirmationEmail(user.email, user.confirmationCode);
 
     res.status(HttpCode.CREATED).json({
       message: req.t('auth.register.success'),
@@ -51,9 +48,9 @@ const login = async (
       throw USER_NOT_FOUND;
     }
 
-    if (user.accountStatus === AccountStatus.PENDING) {
-      return next(USER_UNAUTHORIZED);
-    }
+    // if (user.accountStatus === AccountStatus.PENDING) {
+    //   return next(USER_UNAUTHORIZED);
+    // }
 
     const token = signToken(user.email, user.id);
 
@@ -100,27 +97,27 @@ const getUser = async (
   }
 };
 
-const confirmEmail = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { confirmationCode } = req.params;
-    const user = await userService.findByConfirmationCode(confirmationCode);
+// const confirmEmail = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ): Promise<void> => {
+//   try {
+//     const { confirmationCode } = req.params;
+//     const user = await userService.findByConfirmationCode(confirmationCode);
 
-    if (!user) {
-      throw USER_NOT_FOUND;
-    }
+//     if (!user) {
+//       throw USER_NOT_FOUND;
+//     }
 
-    if (!userService.activateAccount(user.id)) {
-      throw INTERNAL_SERVER_ERROR;
-    }
+//     if (!userService.activateAccount(user.id)) {
+//       throw INTERNAL_SERVER_ERROR;
+//     }
 
-    res.status(HttpCode.OK).json({
-      message: req.t('auth.account.success'),
-    });
-  } catch {}
-};
+//     res.status(HttpCode.OK).json({
+//       message: req.t('auth.account.success'),
+//     });
+//   } catch {}
+// };
 
-export default { register, login, getUser, confirmEmail };
+export default { register, login, getUser };
