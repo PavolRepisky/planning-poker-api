@@ -1,7 +1,7 @@
-import SocketSessionData from '../../types/session/SocketSessionData';
-import SocketSessionJoinUserData from '../../types/session/SocketSessionJoinUserData';
-import SocketSessionUserVoteData from '../../types/session/SocketSessionUserVoteData';
-import SocketVotingData from '../../types/session/SocketVotingData';
+import SocketSessionData from '../types/socket/SocketSessionData';
+import SocketSessionJoinUserData from '../types/socket/SocketSessionJoinUserData';
+import SocketSessionUserVoteData from '../types/socket/SocketSessionUserVoteData';
+import SocketVotingData from '../types/socket/SocketVotingData';
 import SocketSessionUser from './SocketSessionUser';
 
 class SocketSession {
@@ -35,7 +35,7 @@ class SocketSession {
     return {
       users: this.users.map((user) => user.getData(this.showVotes)),
       voting: this.voting,
-      showVotes: this.showVotes
+      showVotes: this.showVotes,
     };
   }
 

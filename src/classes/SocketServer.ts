@@ -1,9 +1,9 @@
 import config from 'config';
 import * as http from 'http';
 import * as socketIO from 'socket.io';
-import SocketSessionJoinUserData from '../../types/session/SocketSessionJoinUserData';
-import SocketSessionUserVoteData from '../../types/session/SocketSessionUserVoteData';
-import SocketVotingData from '../../types/session/SocketVotingData';
+import SocketSessionJoinUserData from '../types/socket/SocketSessionJoinUserData';
+import SocketSessionUserVoteData from '../types/socket/SocketSessionUserVoteData';
+import SocketVotingData from '../types/socket/SocketVotingData';
 import { default as SocketSessionManager } from './SocketSessionManager';
 
 class SocketServer {

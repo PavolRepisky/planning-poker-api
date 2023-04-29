@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import * as http from 'http';
 import morgan from 'morgan';
-import SocketServer from './classes/session/SocketServer';
+import SocketServer from './classes/SocketServer';
 import authRouter from './routes/auth.routes';
 import matrixRouter from './routes/matrix.routes';
 import sessionRouter from './routes/session.routes';
@@ -20,7 +20,7 @@ validateEnv();
 
 const app = express();
 const server = http.createServer(app);
-const socketServer = SocketServer.getInstance(server);
+SocketServer.getInstance(server);
 
 /* Template engine */
 app.set('view engine', 'pug');

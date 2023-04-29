@@ -1,8 +1,8 @@
-
-import SocketSessionData from '../../types/session/SocketSessionData';
-import SocketSessionJoinUserData from '../../types/session/SocketSessionJoinUserData';
-import SocketSessionUserVoteData from '../../types/session/SocketSessionUserVoteData';
-import SocketVotingData from '../../types/session/SocketVotingData';
+import { findUniqueSession } from '../services/session.service';
+import SocketSessionData from '../types/socket/SocketSessionData';
+import SocketSessionJoinUserData from '../types/socket/SocketSessionJoinUserData';
+import SocketSessionUserVoteData from '../types/socket/SocketSessionUserVoteData';
+import SocketVotingData from '../types/socket/SocketVotingData';
 import SocketSession from './SocketSession';
 
 class SocketSessionManager {
@@ -23,10 +23,10 @@ class SocketSessionManager {
   }
 
   private async createSession(hashId: string): Promise<void> {
-    // const votingSession = await sessionService.findByHashId(hashId);
-    // if (!votingSession || this.getSession(hashId)) {
-    //   return;
-    // }
+    const votingSession = await findUniqueSession({ hashId });
+    if (!votingSession || this.getSession(hashId)) {
+      return;
+    }
 
     this.sessions.push(new SocketSession(hashId));
 

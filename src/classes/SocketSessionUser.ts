@@ -1,6 +1,6 @@
-import SocketSessionJoinUserData from '../../types/session/SocketSessionJoinUserData';
-import SocketSessionUserData from '../../types/session/SocketSessionUserData';
-import SocketSessionUserVoteData from '../../types/session/SocketSessionUserVoteData';
+import SocketSessionJoinUserData from '../types/socket/SocketSessionJoinUserData';
+import SocketSessionUserData from '../types/socket/SocketSessionUserData';
+import SocketSessionUserVoteData from '../types/socket/SocketSessionUserVoteData';
 
 class SocketSessionUser {
   private firstName: string;
