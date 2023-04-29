@@ -1,8 +1,8 @@
 import express from 'express';
 import {
-  changeName,
-  changePassword,
-  getUser,
+  changeNameHandler,
+  changePasswordHandler,
+  getUserHandler,
 } from '../controllers/user.controller';
 import { deserializeUser } from '../middleware/deserializeUser';
 import { requireUser } from '../middleware/requireUser';
@@ -13,10 +13,14 @@ const userRouter = express.Router();
 
 userRouter.use(deserializeUser, requireUser);
 
-userRouter.get('/', getUser);
+userRouter.get('/', getUserHandler);
 
-userRouter.patch('/name', validate(changeNameSchema), changeName);
+userRouter.patch('/name', validate(changeNameSchema), changeNameHandler);
 
-userRouter.patch('/password', validate(changePasswordSchema), changePassword);
+userRouter.patch(
+  '/password',
+  validate(changePasswordSchema),
+  changePasswordHandler
+);
 
 export default userRouter;

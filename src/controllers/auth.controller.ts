@@ -42,7 +42,7 @@ const refreshTokenCookieOptions: CookieOptions = {
   maxAge: config.get<number>('refreshTokenExpiresIn') * 60 * 1000,
 };
 
-export const registerUser = async (
+export const registerUserHandler = async (
   req: Request<{}, {}, RegisterRequestBody>,
   res: Response,
   next: NextFunction
@@ -100,7 +100,7 @@ export const registerUser = async (
   }
 };
 
-export const loginUser = async (
+export const loginUserHandler = async (
   req: Request<{}, {}, LoginRequestBody>,
   res: Response,
   next: NextFunction
@@ -141,7 +141,7 @@ export const loginUser = async (
   }
 };
 
-export const refreshAccessToken = async (
+export const refreshAccessTokenHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -195,7 +195,7 @@ const logout = (res: Response) => {
   res.cookie('logged_in', '', { maxAge: 1 });
 };
 
-export const logoutUser = async (
+export const logoutUserHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -211,7 +211,7 @@ export const logoutUser = async (
   }
 };
 
-export const verifyEmail = async (
+export const verifyEmailHandler = async (
   req: Request<VerifyEmailRequestParams>,
   res: Response,
   next: NextFunction
@@ -232,7 +232,7 @@ export const verifyEmail = async (
   }
 };
 
-export const forgotPassword = async (
+export const forgotPasswordHandler = async (
   req: Request<
     Record<string, never>,
     Record<string, never>,
@@ -289,7 +289,7 @@ export const forgotPassword = async (
   }
 };
 
-export const resetPassword = async (
+export const resetPasswordHandler = async (
   req: Request<
     ResetPasswordInput['params'],
     Record<string, never>,

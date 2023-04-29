@@ -7,9 +7,10 @@ import {
 } from '../schemas/user.schema';
 import { updateUser } from '../services/user.service';
 import HttpCode from '../types/HttpCode';
+import UserData from '../types/UserData';
 import USER_UNAUTHORIZED from '../types/errors/UserUnauthorized';
 
-export const getUser = async (
+export const getUserHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -26,7 +27,7 @@ export const getUser = async (
           firstName,
           lastName,
           email,
-        },
+        } as UserData,
       },
     });
   } catch (err: any) {
@@ -34,7 +35,7 @@ export const getUser = async (
   }
 };
 
-export const changeName = async (
+export const changeNameHandler = async (
   req: Request<{}, {}, ChangeNameRequestBody>,
   res: Response,
   next: NextFunction
@@ -57,7 +58,7 @@ export const changeName = async (
           firstName: updatedUser.firstName,
           lastName: updatedUser.lastName,
           email: updatedUser.email,
-        },
+        } as UserData,
       },
     });
   } catch (err: any) {
@@ -65,7 +66,7 @@ export const changeName = async (
   }
 };
 
-export const changePassword = async (
+export const changePasswordHandler = async (
   req: Request<{}, {}, ChangePasswordRequestBody>,
   res: Response,
   next: NextFunction
