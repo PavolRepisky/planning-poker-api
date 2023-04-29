@@ -1,5 +1,6 @@
-import { Prisma, Session, Voting } from '@prisma/client';
-import prisma from '../config/client';
+import { Prisma, PrismaClient, Session, Voting } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export const createSession = async (input: {
   name: string;

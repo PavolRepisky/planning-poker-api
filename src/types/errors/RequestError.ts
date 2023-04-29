@@ -1,11 +1,10 @@
-import { ValidationError } from 'express-validator';
 import HttpCode from '../HttpCode';
-
+import ServerValidationError from './ServerValidationError';
 interface RequestErrorArgs {
   name?: string;
   statusCode: HttpCode;
   message: string;
-  errors?: ValidationError[];
+  errors?: ServerValidationError[];
 }
 
 class RequestError extends Error {

@@ -19,7 +19,7 @@ dotenv.config();
 validateEnv();
 
 const app = express();
-const server = http.createServer(app);
+export const server = http.createServer(app);
 SocketServer.getInstance(server);
 
 /* Template engine */
@@ -80,5 +80,3 @@ app.use(
     });
   }
 );
-
-export default server;

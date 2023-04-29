@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import config from 'config';
 import crypto from 'crypto';
 import { CookieOptions, NextFunction, Request, Response } from 'express';
+import Email from '../classes/Email';
 import {
   ForgotPasswordInput,
   LoginInput,
@@ -13,10 +14,10 @@ import {
 import { createUser, removeUser, signTokens } from '../services/auth.service';
 import { findUniqueUser, findUser, updateUser } from '../services/user.service';
 import HttpCode from '../types/HttpCode';
+import REQUEST_VALIDATION_ERROR from '../types/errors/RequestValidationError';
+import ServerValidationError from '../types/errors/ServerValidationError';
 import USER_NOT_FOUND from '../types/errors/UserNotFound';
 import USER_UNAUTHORIZED from '../types/errors/UserUnauthorized';
-import ServerValidationError from '../types/errors/ValidationError';
-import Email from '../utils/Email';
 import { signJwt, verifyJwt } from '../utils/jwt';
 
 const cookiesOptions: CookieOptions = {
@@ -77,21 +78,17 @@ export const registerUserHandler = async (
   } catch (err: any) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
-        const error: ServerValidationError = {
-          path: 'email',
-          location: 'body',
-          value: req.body.email,
-          message: req.t('common.validations.email.taken'),
-        };
-
-        res.status(HttpCode.BAD_REQUEST).json({
-          status: 'fail',
-          errors: [error],
-        });
-        return;
+        const errors: ServerValidationError[] = [
+          {
+            path: 'email',
+            location: 'body',
+            value: req.body.email,
+            message: req.t('common.validations.email.taken'),
+          },
+        ];
+        return next(REQUEST_VALIDATION_ERROR(errors));
       }
     }
-
     try {
       await removeUser({ email: email.toLowerCase() });
     } catch {}

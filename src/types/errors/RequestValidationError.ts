@@ -1,8 +1,8 @@
-import { ValidationError } from 'express-validator';
 import HttpCode from '../HttpCode';
 import RequestError from './RequestError';
+import ServerValidationError from './ServerValidationError';
 
-const REQUEST_VALIDATION_ERROR = (errors: ValidationError[]) =>
+const REQUEST_VALIDATION_ERROR = (errors: ServerValidationError[]) =>
   new RequestError({
     statusCode: HttpCode.BAD_REQUEST,
     message: 'common.errors.validation',

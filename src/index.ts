@@ -1,5 +1,5 @@
 import config from 'config';
-import server from './app';
+import { server } from './app';
 
 const port = config.get<number>('port');
 

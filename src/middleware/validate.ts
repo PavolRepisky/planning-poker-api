@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import * as yup from 'yup';
-import ServerValidationError from '../types/errors/ValidationError';
+import REQUEST_VALIDATION_ERROR from '../types/errors/RequestValidationError';
+import ServerValidationError from '../types/errors/ServerValidationError';
 
 const extractErrorsData = (
   req: Request,
@@ -39,10 +40,7 @@ export const validate =
       next();
     } catch (err) {
       if (err instanceof yup.ValidationError) {
-        return res.status(400).json({
-          status: 'fail',
-          errors: extractErrorsData(req, err),
-        });
+        next(REQUEST_VALIDATION_ERROR(extractErrorsData(req, err)));
       }
       next(err);
     }

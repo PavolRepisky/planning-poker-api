@@ -11,8 +11,9 @@ import {
 import HttpCode from '../types/HttpCode';
 import MatrixData from '../types/MatrixData';
 import MATRIX_NOT_FOUND from '../types/errors/MatrixNotFound';
+import REQUEST_VALIDATION_ERROR from '../types/errors/RequestValidationError';
+import ServerValidationError from '../types/errors/ServerValidationError';
 import USER_UNAUTHORIZED from '../types/errors/UserUnauthorized';
-import ServerValidationError from '../types/errors/ValidationError';
 
 export const createMatrixHandler = async (
   req: Request<{}, {}, CreateEditInput['body']>,
@@ -47,18 +48,15 @@ export const createMatrixHandler = async (
   } catch (err: any) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
-        const error: ServerValidationError = {
-          path: 'name',
-          location: 'body',
-          value: req.body.name,
-          message: req.t('common.validations.matrix.taken'),
-        };
-
-        res.status(HttpCode.BAD_REQUEST).json({
-          status: 'fail',
-          errors: [error],
-        });
-        return;
+        const errors: ServerValidationError[] = [
+          {
+            path: 'name',
+            location: 'body',
+            value: req.body.name,
+            message: req.t('common.validations.matrix.taken'),
+          },
+        ];
+        return next(REQUEST_VALIDATION_ERROR(errors));
       }
     }
     next(err);
@@ -115,18 +113,15 @@ export const updateMatrixHandler = async (
     console.log(err);
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
-        const error: ServerValidationError = {
-          path: 'name',
-          location: 'body',
-          value: req.body.name,
-          message: req.t('common.validations.matrix.taken'),
-        };
-
-        res.status(HttpCode.BAD_REQUEST).json({
-          status: 'fail',
-          errors: [error],
-        });
-        return;
+        const errors: ServerValidationError[] = [
+          {
+            path: 'name',
+            location: 'body',
+            value: req.body.name,
+            message: req.t('common.validations.matrix.taken'),
+          },
+        ];
+        return next(REQUEST_VALIDATION_ERROR(errors));
       }
     }
     next(err);
