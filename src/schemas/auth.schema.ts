@@ -1,3 +1,4 @@
+import config from 'config';
 import * as yup from 'yup';
 import passwordRegex from '../utils/passwordRegex';
 
@@ -7,12 +8,18 @@ export const regsiterSchema = yup.object({
       .string()
       .trim()
       .required('common.validations.required')
-      .max(50, 'common.validations.string.maxLength'),
+      .max(
+        config.get<number>('maxNameLength'),
+        'common.validations.string.max'
+      ),
     lastName: yup
       .string()
       .trim()
       .required('common.validations.required')
-      .max(50, 'common.validations.string.maxLength'),
+      .max(
+        config.get<number>('maxNameLength'),
+        'common.validations.string.max'
+      ),
     email: yup
       .string()
       .trim()

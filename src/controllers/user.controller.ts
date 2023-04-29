@@ -60,7 +60,9 @@ export const changeName = async (
         },
       },
     });
-  } catch {}
+  } catch (err: any) {
+    next(err);
+  }
 };
 
 export const changePassword = async (
@@ -86,5 +88,7 @@ export const changePassword = async (
     res.status(HttpCode.OK).json({
       message: req.t('user.changePassword.success'),
     });
-  } catch {}
+  } catch (err: any) {
+    next(err);
+  }
 };

@@ -4,7 +4,7 @@ import {
   PrismaClientUnknownRequestError,
 } from '@prisma/client/runtime/library';
 import prisma from '../config/client';
-import MATRIX_NOT_FOUND from '../types/core/matrixNotFound';
+import MATRIX_NOT_FOUND from '../types/errors/MatrixNotFound';
 
 const create = (
   name: string,

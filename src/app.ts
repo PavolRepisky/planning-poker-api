@@ -7,6 +7,7 @@ import * as http from 'http';
 import morgan from 'morgan';
 import SocketServer from './classes/session/SocketServer';
 import authRouter from './routes/auth.routes';
+import matrixRouter from './routes/matrix.routes';
 import userRouter from './routes/user.routes';
 import HttpCode from './types/HttpCode';
 import RequestError from './types/errors/RequestError';
@@ -47,6 +48,8 @@ if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 /* Routes */
 app.use(authRouter);
 app.use('/users', userRouter);
+app.use('/matrices', matrixRouter);
+
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
   next(
     new RequestError({

@@ -1,5 +1,5 @@
 import HttpCode from '../HttpCode';
-import RequestError from '../errors/RequestError';
+import RequestError from './RequestError';
 
 const MATRIX_NOT_FOUND = new RequestError({
   statusCode: HttpCode.NOT_FOUND,

@@ -2,12 +2,11 @@ import { NextFunction, Request, Response } from 'express';
 import matrixService from '../services/matrixService';
 import sessionService from '../services/sessionService';
 import HttpCode from '../types/HttpCode';
-import MATRIX_NOT_FOUND from '../types/core/matrixNotFound';
 import SESSION_NOT_FOUND from '../types/core/sessionNotFound';
-import MatrixData from '../types/matrix/MatrixData';
+import MATRIX_NOT_FOUND from '../types/errors/MatrixNotFound';
+import MatrixData from '../types/MatrixData';
 import SessionData from '../types/session/SessionData';
 import VotingData from '../types/session/VotingData';
-import parseMatrixValuesToArray from '../utils/matrix/parseMatrixValuesToArray';
 
 const create = async (
   req: Request,
@@ -75,9 +74,9 @@ const join = async (
           name: matrix.name,
           rows: matrix.rows,
           columns: matrix.columns,
-          values: parseMatrixValuesToArray(matrix.values),
+          values: matrix.values,
           createdAt: matrix.createdAt,
-        } as MatrixData,
+        }
       },
     });
   } catch (error: any) {

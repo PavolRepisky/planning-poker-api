@@ -10,7 +10,6 @@
       "route": {
         "notFound": "Route not found"
       },
-
       "matrix": {
         "notFound": "Matrix not found"
       },
@@ -20,8 +19,14 @@
     },
     "validations": {
       "required": "The field is required",
+      "type": "Invalid value type",
       "string": {
-        "maxLength": "Value must be at most 50 characters long"
+        "max": "Value is too long",
+        "min": "Value is too short"
+      },
+      "integer": {
+        "max": "Value is too big",
+        "min": "Value is too low"
       },
       "email": {
         "invalid": "E-mail address is invalid",
@@ -31,15 +36,10 @@
         "weak": "Password must be at least 8 characters, contain a lower and upper case letter and a digit",
         "match": "Passwords must match"
       },
-
-      "passwordsMatch": "Passwords does not match",
-      "matrixSize": "Must be an integer greater than 1",
-      "twoDimStringArray": "Must be two dimensional string array",
-      "uniqueValues": "Must contain unique values only",
-      "uniqueName": "Name is already taken",
-      "sizeMatch": "Does not match with rows and columns",
-      "integer": "Must be an integer",
-      "matrixId": "Wrong matrix id"
+      "matrix": {
+        "uniqueValues": "All values must be different",
+        "taken": "Name is already taken"
+      }
     }
   },
   "email": {
@@ -49,7 +49,7 @@
     "reset": {
       "subject": "Reset your password"
     },
-    "fail": "There was an error sending email"
+    "fail": "There was an error sending e-mail"
   },
   "auth": {
     "register": {

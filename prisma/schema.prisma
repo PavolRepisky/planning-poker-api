@@ -30,17 +30,21 @@ model User {
 }
 
 model Matrix {
-  id        Int       @id @default(autoincrement())
-  name      String
-  rows      Int
-  columns   Int
-  values    Json
-  creator   User      @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  creatorId String
-  sessions  Session[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id      Int    @id @default(autoincrement())
+  name    String
+  rows    Int
+  columns Int
+  values  Json
 
+  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions Session[]
+
+  @@unique([creatorId, name])
   @@map("matrices")
 }
 
