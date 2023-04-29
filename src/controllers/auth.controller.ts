@@ -4,11 +4,11 @@ import config from 'config';
 import crypto from 'crypto';
 import { CookieOptions, NextFunction, Request, Response } from 'express';
 import {
-  ForgotPasswordBody,
-  LoginRequestBody,
-  RegisterRequestBody,
+  ForgotPasswordInput,
+  LoginInput,
+  RegisterInput,
   ResetPasswordInput,
-  VerifyEmailRequestParams,
+  VerifyEmailInput,
 } from '../schemas/auth.schema';
 import { createUser, removeUser, signTokens } from '../services/auth.service';
 import { findUniqueUser, findUser, updateUser } from '../services/user.service';
@@ -43,7 +43,7 @@ const refreshTokenCookieOptions: CookieOptions = {
 };
 
 export const registerUserHandler = async (
-  req: Request<{}, {}, RegisterRequestBody>,
+  req: Request<{}, {}, RegisterInput['body']>,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -101,7 +101,7 @@ export const registerUserHandler = async (
 };
 
 export const loginUserHandler = async (
-  req: Request<{}, {}, LoginRequestBody>,
+  req: Request<{}, {}, LoginInput['body']>,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -212,7 +212,7 @@ export const logoutUserHandler = async (
 };
 
 export const verifyEmailHandler = async (
-  req: Request<VerifyEmailRequestParams>,
+  req: Request<VerifyEmailInput['params']>,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -233,11 +233,7 @@ export const verifyEmailHandler = async (
 };
 
 export const forgotPasswordHandler = async (
-  req: Request<
-    Record<string, never>,
-    Record<string, never>,
-    ForgotPasswordBody
-  >,
+  req: Request<{}, {}, ForgotPasswordInput['body']>,
   res: Response,
   next: NextFunction
 ) => {

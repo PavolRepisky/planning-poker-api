@@ -79,15 +79,12 @@ export const resetPasswordSchema = yup.object({
   }),
 });
 
-export type RegisterRequestBody = yup.InferType<typeof regsiterSchema>['body'];
+export type RegisterInput = yup.InferType<typeof regsiterSchema>;
 
-export type LoginRequestBody = yup.InferType<typeof loginSchema>['body'];
+export type LoginInput = yup.InferType<typeof loginSchema>;
 
-export type VerifyEmailRequestParams = yup.InferType<
-  typeof verifyEmailSchema
->['params'];
+export type VerifyEmailInput = yup.InferType<typeof verifyEmailSchema>;
 
-export type ForgotPasswordBody = yup.InferType<
-  typeof forgotPasswordSchema
->['body'];
+export type ForgotPasswordInput = yup.InferType<typeof forgotPasswordSchema>;
+
 export type ResetPasswordInput = yup.InferType<typeof resetPasswordSchema>;

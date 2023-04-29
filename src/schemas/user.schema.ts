@@ -37,10 +37,6 @@ export const changePasswordSchema = yup.object({
   }),
 });
 
-export type ChangeNameRequestBody = yup.InferType<
-  typeof changeNameSchema
->['body'];
+export type ChangeNameInput = yup.InferType<typeof changeNameSchema>;
 
-export type ChangePasswordRequestBody = yup.InferType<
-  typeof changePasswordSchema
->['body'];
+export type ChangePasswordInput = yup.InferType<typeof changePasswordSchema>;

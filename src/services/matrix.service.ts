@@ -29,7 +29,7 @@ export const updateMatrix = async (
     select,
   })) as Matrix;
 
-  if (matrix.values) {
+  if (matrix?.values) {
     matrix.values = parsePrismaJsonToArray(matrix.values);
   }
   return matrix;
@@ -40,7 +40,9 @@ export const deleteMatrix = async (where: Prisma.MatrixWhereUniqueInput) => {
     where,
   })) as Matrix;
 
-  matrix.values = parsePrismaJsonToArray(matrix.values);
+  if (matrix) {
+    matrix.values = parsePrismaJsonToArray(matrix.values);
+  }
   return matrix;
 };
 
@@ -72,7 +74,7 @@ export const findUniqueMatrix = async (
     select,
   })) as Matrix;
 
-  if (matrix.values) {
+  if (matrix?.values) {
     matrix.values = parsePrismaJsonToArray(matrix.values);
   }
   return matrix;

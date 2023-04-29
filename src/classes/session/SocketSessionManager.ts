@@ -1,4 +1,4 @@
-import sessionService from '../../services/sessionService';
+
 import SocketSessionData from '../../types/session/SocketSessionData';
 import SocketSessionJoinUserData from '../../types/session/SocketSessionJoinUserData';
 import SocketSessionUserVoteData from '../../types/session/SocketSessionUserVoteData';
@@ -23,10 +23,10 @@ class SocketSessionManager {
   }
 
   private async createSession(hashId: string): Promise<void> {
-    const votingSession = await sessionService.findByHashId(hashId);
-    if (!votingSession || this.getSession(hashId)) {
-      return;
-    }
+    // const votingSession = await sessionService.findByHashId(hashId);
+    // if (!votingSession || this.getSession(hashId)) {
+    //   return;
+    // }
 
     this.sessions.push(new SocketSession(hashId));
 

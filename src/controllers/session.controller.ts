@@ -1,27 +1,34 @@
 import { NextFunction, Request, Response } from 'express';
-import matrixService from '../services/matrixService';
-import sessionService from '../services/sessionService';
+import { CreateSessionInput, CreateVotingInput } from '../schemas/session.schema';
+import { findUniqueMatrix } from '../services/matrix.service';
+import {
+  createSession,
+  createVoting,
+  findUniqueSession,
+  updateVotings,
+} from '../services/session.service';
 import HttpCode from '../types/HttpCode';
-import SESSION_NOT_FOUND from '../types/core/sessionNotFound';
+import SessionData from '../types/SessionData';
+import VotingData from '../types/VotingData';
 import MATRIX_NOT_FOUND from '../types/errors/MatrixNotFound';
-import MatrixData from '../types/MatrixData';
-import SessionData from '../types/session/SessionData';
-import VotingData from '../types/session/VotingData';
+import SESSION_NOT_FOUND from '../types/errors/SessionNotFound';
 
-const create = async (
-  req: Request,
+export const createSessionHandler = async (
+  req: Request<{}, {}, CreateSessionInput['body']>,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
     const { name, matrixId } = req.body;
-    const decodedToken = res.locals.token;
+    const user = res.locals.user;
 
-    const session = await sessionService.create(
-      name,
-      matrixId,
-      decodedToken.userId
-    );
+    const matrix = await findUniqueMatrix({ id: matrixId });
+
+    if (!matrix || user.id !== matrix.creatorId) {
+      throw MATRIX_NOT_FOUND;
+    }
+
+    const session = await createSession({ name, matrixId, ownerId: user.id });
 
     res.status(HttpCode.CREATED).json({
       message: req.t('session.create.success'),
@@ -35,26 +42,25 @@ const create = async (
         } as SessionData,
       },
     });
-  } catch (error: any) {
-    next(error);
+  } catch (err: any) {
+    next(err);
   }
 };
 
-const join = async (
+export const joinSessionHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
     const { hashId } = req.params;
-    const decodedToken = res.locals.token;
 
-    const session = await sessionService.findByHashId(hashId);
+    const session = await findUniqueSession({ hashId });
     if (!session) {
       throw SESSION_NOT_FOUND;
     }
 
-    const matrix = await matrixService.findById(session.matrixId);
+    const matrix = await findUniqueMatrix({ id: session.matrixId });
     if (!matrix) {
       throw MATRIX_NOT_FOUND;
     }
@@ -76,7 +82,7 @@ const join = async (
           columns: matrix.columns,
           values: matrix.values,
           createdAt: matrix.createdAt,
-        }
+        },
       },
     });
   } catch (error: any) {
@@ -84,27 +90,32 @@ const join = async (
   }
 };
 
-const createVoting = async (
-  req: Request,
+export const createVotingHandler = async (
+  req: Request<Record<string, any>, {}, CreateVotingInput['body']>,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
     const { name, description } = req.body;
+    const { hashId } = req.params;
+    const user = res.locals.user;
 
-    const session = await sessionService.findByHashId(req.params.hashId);
-    if (!session) {
+    const session = await findUniqueSession({ hashId });
+    if (!session || user.id !== session.ownerId) {
       throw SESSION_NOT_FOUND;
     }
 
-    await sessionService.closeVotings(session.id);
+    await updateVotings(
+      { sessionId: session.id, active: true },
+      { active: false }
+    );
 
-    const voting = await sessionService.createVoting(
+    const voting = await createVoting({
       name,
       description,
-      true,
-      session.id
-    );
+      active: true,
+      sessionId: session.id,
+    });
 
     res.status(HttpCode.CREATED).json({
       message: req.t('session.createVoting.success'),
@@ -121,5 +132,3 @@ const createVoting = async (
     next(error);
   }
 };
-
-export default { create, join, createVoting };

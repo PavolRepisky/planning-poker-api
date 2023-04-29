@@ -1,10 +1,7 @@
 import bcrypt from 'bcryptjs';
 import config from 'config';
 import { NextFunction, Request, Response } from 'express';
-import {
-  ChangeNameRequestBody,
-  ChangePasswordRequestBody,
-} from '../schemas/user.schema';
+import { ChangeNameInput, ChangePasswordInput } from '../schemas/user.schema';
 import { updateUser } from '../services/user.service';
 import HttpCode from '../types/HttpCode';
 import UserData from '../types/UserData';
@@ -36,7 +33,7 @@ export const getUserHandler = async (
 };
 
 export const changeNameHandler = async (
-  req: Request<{}, {}, ChangeNameRequestBody>,
+  req: Request<{}, {}, ChangeNameInput['body']>,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -67,7 +64,7 @@ export const changeNameHandler = async (
 };
 
 export const changePasswordHandler = async (
-  req: Request<{}, {}, ChangePasswordRequestBody>,
+  req: Request<{}, {}, ChangePasswordInput['body']>,
   res: Response,
   next: NextFunction
 ): Promise<void> => {

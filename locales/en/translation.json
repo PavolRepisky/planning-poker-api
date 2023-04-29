@@ -39,6 +39,9 @@
       "matrix": {
         "uniqueValues": "All values must be different",
         "taken": "Name is already taken"
+      }, 
+      "session": {
+        "matrixId": "Matrix with given id does not exist"
       }
     }
   },

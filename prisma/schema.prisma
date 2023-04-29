@@ -49,29 +49,34 @@ model Matrix {
 }
 
 model Session {
-  id        Int      @id @default(autoincrement())
-  hashId    String   @unique @default(uuid())
-  name      String
-  matrix    Matrix   @relation(fields: [matrixId], references: [id], onDelete: Cascade)
-  matrixId  Int
-  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId   String
-  votings   Voting[]
+  id     Int    @id @default(autoincrement())
+  hashId String @unique @default(uuid())
+  name   String
+
+  matrix   Matrix @relation(fields: [matrixId], references: [id], onDelete: Cascade)
+  matrixId Int
+  owner    User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId  String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  votings Voting[]
 
   @@map("sessions")
 }
 
 model Voting {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   description String?
   active      Boolean
-  session     Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  sessionId   Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("votings")
 }
