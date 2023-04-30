@@ -8,7 +8,6 @@ let testUser: any;
 
 beforeAll(async () => {
   testUser = (await generateTestUsers(1, { verifyEmail: true }))[0];
-  console.log('user=', testUser);
 });
 
 afterAll(async () => {
@@ -52,8 +51,6 @@ describe('GET /sessions/:hashId', () => {
     it('should respond with a 200 status code, a message, a session and matrix data', async () => {
       const matrix = testUser.matrices[0];
       const session = testUser.sessions[0];
-
-      console.log('session=', session);
 
       const response = await request(server).get(`/sessions/${session.hashId}`);
 

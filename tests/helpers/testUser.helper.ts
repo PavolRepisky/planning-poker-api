@@ -95,7 +95,6 @@ export const generateTestUsers = async (
     const matrices = await generateTestMatrices(3, user.id);
     const sessions = await generateTestSessions(matrices);
 
-    console.log('helper=', matrices);
 
     const extendedUser = {
       ...user,

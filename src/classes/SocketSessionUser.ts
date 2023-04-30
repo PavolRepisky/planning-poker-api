@@ -13,7 +13,7 @@ class SocketSessionUser {
     this.firstName = userData.firstName;
     this.lastName = userData.lastName;
     this.connectionId = userData.connectionId;
-    this.socketIds = new Set(socketId);
+    this.socketIds = new Set([socketId]);
   }
 
   getConnectionId() {
@@ -26,7 +26,7 @@ class SocketSessionUser {
       lastName: this.lastName,
       connectionId: this.connectionId,
       voted: this.vote !== undefined,
-      vote: includeVote ? this.vote : undefined,
+      vote: includeVote && this.vote ? this.vote : undefined,
     };
   }
 
@@ -34,7 +34,7 @@ class SocketSessionUser {
     this.socketIds.add(socketId);
   }
 
-  removeSocket(socketId: string) {
+  removeSocketId(socketId: string) {
     this.socketIds.delete(socketId);
   }
 

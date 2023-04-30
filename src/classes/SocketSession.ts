@@ -6,12 +6,13 @@ import SocketSessionUser from './SocketSessionUser';
 
 class SocketSession {
   private showVotes = false;
-  private users: SocketSessionUser[] = [];
+  private users: SocketSessionUser[];
   private hashId: string;
   private voting?: SocketVotingData;
 
   constructor(hashId: string) {
     this.hashId = hashId;
+    this.users = [];
   }
 
   private getUser(userConnectionId: string): SocketSessionUser | null {
@@ -72,9 +73,9 @@ class SocketSession {
       return false;
     }
 
-    existingUser.removeSocket(socketId);
+    existingUser.removeSocketId(socketId);
 
-    if (!existingUser.hasDisconnected) {
+    if (existingUser.hasDisconnected()) {
       this.removeUser(userConnectionId);
       return true;
     }
