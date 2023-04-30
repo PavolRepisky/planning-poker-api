@@ -9,7 +9,6 @@ import {
   LoginInput,
   RegisterInput,
   ResetPasswordInput,
-  VerifyEmailInput,
 } from '../schemas/auth.schema';
 import { createUser, removeUser, signTokens } from '../services/auth.service';
 import { findUniqueUser, findUser, updateUser } from '../services/user.service';
@@ -59,7 +58,7 @@ export const registerUserHandler = async (
     const user = await createUser({
       firstName,
       lastName,
-      email: email.toLowerCase(),
+      email,
       password: hashedPassword,
     });
 
@@ -67,7 +66,8 @@ export const registerUserHandler = async (
       user.verificationCode
     }`;
 
-    await new Email(user, redirectUrl).sendVerificationCode(req);
+    if (process.env.NODE_ENV !== 'test')
+      await new Email(user, redirectUrl).sendVerificationCode(req);
 
     res.status(HttpCode.CREATED).json({
       message: req.t('auth.register.success'),
@@ -90,7 +90,7 @@ export const registerUserHandler = async (
       }
     }
     try {
-      await removeUser({ email: email.toLowerCase() });
+      await removeUser({ email: email });
     } catch {}
 
     next(err);
@@ -106,7 +106,7 @@ export const loginUserHandler = async (
     const { email, password } = req.body;
 
     const user = await findUniqueUser(
-      { email: email.toLowerCase() },
+      { email: email },
       { id: true, email: true, verified: true, password: true }
     );
 
@@ -165,11 +165,11 @@ export const refreshAccessTokenHandler = async (
       throw USER_UNAUTHORIZED;
     }
 
-    const access_token = signJwt({ sub: user.id }, 'accessTokenKey', {
+    const accessToken = signJwt({ sub: user.id }, 'accessTokenKey', {
       expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
     });
 
-    res.cookie('access_token', access_token, accessTokenCookieOptions);
+    res.cookie('access_token', accessToken, accessTokenCookieOptions);
     res.cookie('logged_in', true, {
       ...accessTokenCookieOptions,
       httpOnly: false,
@@ -178,7 +178,7 @@ export const refreshAccessTokenHandler = async (
     res.status(HttpCode.OK).json({
       message: req.t('auth.refresh.success'),
       data: {
-        access_token,
+        accessToken,
       },
     });
   } catch (err: any) {
@@ -187,9 +187,9 @@ export const refreshAccessTokenHandler = async (
 };
 
 const logout = (res: Response) => {
-  res.cookie('access_token', '', { maxAge: 1 });
-  res.cookie('refresh_token', '', { maxAge: 1 });
-  res.cookie('logged_in', '', { maxAge: 1 });
+  res.cookie('access_token', '', { maxAge: -1 });
+  res.cookie('refresh_token', '', { maxAge: -1 });
+  res.cookie('logged_in', '', { maxAge: -1 });
 };
 
 export const logoutUserHandler = async (
@@ -209,7 +209,7 @@ export const logoutUserHandler = async (
 };
 
 export const verifyEmailHandler = async (
-  req: Request<VerifyEmailInput['params']>,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -235,10 +235,18 @@ export const forgotPasswordHandler = async (
   next: NextFunction
 ) => {
   try {
-    const user = await findUniqueUser({ email: req.body.email.toLowerCase() });
+    const user = await findUniqueUser({ email: req.body.email });
 
     if (!user) {
-      throw USER_NOT_FOUND;
+      const errors: ServerValidationError[] = [
+        {
+          path: 'email',
+          location: 'body',
+          value: req.body.email,
+          message: req.t('common.validations.email.invalid'),
+        },
+      ];
+      throw REQUEST_VALIDATION_ERROR(errors);
     }
 
     if (!user.verified) {
@@ -284,7 +292,7 @@ export const forgotPasswordHandler = async (
 
 export const resetPasswordHandler = async (
   req: Request<
-    ResetPasswordInput['params'],
+    Record<string, any>,
     Record<string, never>,
     ResetPasswordInput['body']
   >,
@@ -323,9 +331,9 @@ export const resetPasswordHandler = async (
     );
 
     logout(res);
-    res.status(200).json({
-      status: 'success',
-      message: 'Password data updated successfully',
+
+    res.status(HttpCode.OK).json({
+      message: req.t('auth.reset.success'),
     });
   } catch (err: any) {
     next(err);

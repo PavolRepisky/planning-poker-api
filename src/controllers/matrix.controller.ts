@@ -110,7 +110,6 @@ export const updateMatrixHandler = async (
       },
     });
   } catch (err: any) {
-    console.log(err);
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
         const errors: ServerValidationError[] = [

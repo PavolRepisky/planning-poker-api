@@ -1,7 +1,10 @@
-import { Matrix, Prisma, PrismaClient } from '@prisma/client';
+import { Matrix, Prisma } from '@prisma/client';
 import { parsePrismaJsonToArray } from '../utils/parsePrismaJsonToArray';
+import prisma from '../utils/prisma';
 
-const prisma = new PrismaClient();
+export const transformName = (name: string) => {
+  return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+};
 
 export const createMatrix = async (input: {
   name: string;
@@ -11,7 +14,10 @@ export const createMatrix = async (input: {
   creatorId: string;
 }) => {
   const matrix = (await prisma.matrix.create({
-    data: input,
+    data: {
+      ...input,
+      name: transformName(input.name),
+    },
   })) as Matrix;
 
   matrix.values = parsePrismaJsonToArray(matrix.values);
@@ -20,9 +26,12 @@ export const createMatrix = async (input: {
 
 export const updateMatrix = async (
   where: Partial<Prisma.MatrixWhereUniqueInput>,
-  data: Prisma.MatrixUpdateInput,
+  data: { name?: string; rows?: number; columns?: number; values?: string },
   select?: Prisma.MatrixSelect
 ) => {
+  if (data.name) {
+    data.name = transformName(data.name);
+  }
   const matrix = (await prisma.matrix.update({
     where,
     data,

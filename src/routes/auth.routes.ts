@@ -16,7 +16,6 @@ import {
   loginSchema,
   regsiterSchema,
   resetPasswordSchema,
-  verifyEmailSchema,
 } from '../schemas/auth.schema';
 
 const authRouter = express.Router();
@@ -29,11 +28,7 @@ authRouter.get('/refresh', refreshAccessTokenHandler);
 
 authRouter.get('/logout', deserializeUser, requireUser, logoutUserHandler);
 
-authRouter.get(
-  '/verify-email/:verificationCode',
-  validate(verifyEmailSchema),
-  verifyEmailHandler
-);
+authRouter.get('/verify-email/:verificationCode', verifyEmailHandler);
 
 authRouter.post(
   '/forgot-password',

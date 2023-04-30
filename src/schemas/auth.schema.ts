@@ -47,12 +47,6 @@ export const loginSchema = yup.object({
   }),
 });
 
-export const verifyEmailSchema = yup.object({
-  params: yup.object({
-    verificationCode: yup.string().required('common.validations.required'),
-  }),
-});
-
 export const forgotPasswordSchema = yup.object({
   body: yup.object({
     email: yup
@@ -64,9 +58,6 @@ export const forgotPasswordSchema = yup.object({
 });
 
 export const resetPasswordSchema = yup.object({
-  params: yup.object({
-    resetToken: yup.string().required('common.validations.required'),
-  }),
   body: yup.object({
     password: yup
       .string()
@@ -82,8 +73,6 @@ export const resetPasswordSchema = yup.object({
 export type RegisterInput = yup.InferType<typeof regsiterSchema>;
 
 export type LoginInput = yup.InferType<typeof loginSchema>;
-
-export type VerifyEmailInput = yup.InferType<typeof verifyEmailSchema>;
 
 export type ForgotPasswordInput = yup.InferType<typeof forgotPasswordSchema>;
 

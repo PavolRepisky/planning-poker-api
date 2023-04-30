@@ -1,6 +1,5 @@
-import { Prisma, PrismaClient, Session, Voting } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { Prisma, Session, Voting } from '@prisma/client';
+import prisma from '../utils/prisma';
 
 export const createSession = async (input: {
   name: string;
@@ -43,9 +42,22 @@ export const updateVotings = async (
   });
 };
 
-export default {
-  createSession,
-  findUniqueSession,
-  createVoting,
-  updateVotings,
+export const findVotings = async (
+  where: Partial<Prisma.VotingWhereInput>,
+  select?: Prisma.VotingSelect
+) => {
+  return await prisma.voting.findMany({
+    where,
+    select,
+  });
+};
+
+export const findUniqueVoting = async (
+  where: Prisma.VotingWhereUniqueInput,
+  select?: Prisma.VotingSelect
+) => {
+  return (await prisma.voting.findUnique({
+    where,
+    select,
+  })) as Voting;
 };

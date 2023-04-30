@@ -1,6 +1,7 @@
-import { Prisma, PrismaClient, User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import config from 'config';
 import { signJwt } from '../utils/jwt';
+import prisma from '../utils/prisma';
 
 export const excludedFields = [
   'verified',
@@ -9,17 +10,21 @@ export const excludedFields = [
   'updatedAt',
 ];
 
-const prisma = new PrismaClient();
-
 export const createUser = async (input: Prisma.UserCreateInput) => {
   return (await prisma.user.create({
-    data: input,
+    data: {
+      ...input,
+      email: input.email.toLowerCase(),
+    },
   })) as User;
 };
 
 export const removeUser = async (where: Prisma.UserWhereUniqueInput) => {
   return (await prisma.user.delete({
-    where,
+    where: {
+      ...where,
+      email: where.email?.toLowerCase(),
+    },
   })) as User;
 };
 

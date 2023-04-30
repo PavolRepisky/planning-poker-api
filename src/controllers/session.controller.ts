@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateSessionInput, CreateVotingInput } from '../schemas/session.schema';
+import {
+  CreateSessionInput,
+  CreateVotingInput,
+} from '../schemas/session.schema';
 import { findUniqueMatrix } from '../services/matrix.service';
 import {
   createSession,
@@ -38,7 +41,6 @@ export const createSessionHandler = async (
           name: session.name,
           hashId: session.hashId,
           matrixId: session.matrixId,
-          ownerId: session.ownerId,
         } as SessionData,
       },
     });
@@ -73,7 +75,6 @@ export const joinSessionHandler = async (
           name: session.name,
           hashId: session.hashId,
           matrixId: session.matrixId,
-          ownerId: session.ownerId,
         } as SessionData,
         matrix: {
           id: matrix.id,
