@@ -22,7 +22,7 @@ services:
     env_file:
       - .env.development
     volumes:
-      - postgres-data:/data/postgres
+      - postgres-data:/var/lib/postgresql/data
 
   postgres_test:
     image: postgres:latest

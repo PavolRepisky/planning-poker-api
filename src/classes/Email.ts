@@ -51,13 +51,21 @@ export default class Email {
     await this.newTransport().sendMail(mailOptions);
   }
 
+  getRequestLanguage = (req: Request) => {
+    return req.headers['accept-language']?.toLowerCase().split('-')[0] ?? 'en';
+  };
+
   async sendVerificationCode(req: Request) {
-    const lang = req.headers['accept-language']?.toLowerCase() ?? 'en';
-    await this.send(`verificationCode_${lang}`, req.t('email.verify.subject'));
+    await this.send(
+      `verificationCode_${this.getRequestLanguage(req)}`,
+      req.t('email.verify.subject')
+    );
   }
 
   async sendPasswordResetToken(req: Request) {
-    const lang = req.headers['accept-language']?.toLowerCase() ?? 'en';
-    await this.send(`resetPassword_${lang}`, req.t('email.reset.subject'));
+    await this.send(
+      `resetPassword_${this.getRequestLanguage(req)}`,
+      req.t('email.reset.subject')
+    );
   }
 }
