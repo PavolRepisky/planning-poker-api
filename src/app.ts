@@ -1,49 +1,61 @@
-import * as cors from 'cors';
-import { config } from 'dotenv';
+import config from 'config';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import * as http from 'http';
 import morgan from 'morgan';
-import SocketServer from './classes/session/SocketServer';
-import i18NextSetup from './config/i18n';
-import authRoutes from './routes/authRoutes';
-import matrixRoutes from './routes/matrixRoutes';
-import sessionRoutes from './routes/sessionRoutes';
-import userRoutes from './routes/userRoutes';
-import HttpCode from './types/core/httpCode';
-import RequestError from './types/core/requestError';
+import SocketServer from './classes/SocketServer';
+import authRouter from './routes/auth.routes';
+import matrixRouter from './routes/matrix.routes';
+import sessionRouter from './routes/session.routes';
+import userRouter from './routes/user.routes';
+import HttpCode from './types/HttpCode';
+import RequestError from './types/errors/RequestError';
+import ROUTE_NOT_FOUND from './types/errors/RouteNotFound';
+import i18next from './utils/i18next';
+import validateEnv from './utils/validateEnv';
+
+dotenv.config();
+validateEnv();
 
 const app = express();
-const server = http.createServer(app);
-const socketServer = SocketServer.getInstance(server);
+export const server = http.createServer(app);
+SocketServer.getInstance(server);
+
+/* Template engine */
+app.set('view engine', 'pug');
+app.set('views', `${__dirname}/views`);
 
 /* Request body parsing */
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
 
-/* Logging */
-app.use(morgan('dev'));
+/* Request cookie parsing */
+app.use(cookieParser());
+
+/* Cors */
+app.use(
+  cors({
+    origin: [config.get<string>('origin')],
+    credentials: true,
+  })
+);
 
 /* Localization */
-app.use(i18NextSetup);
+app.use(i18next);
 
-/* Socket IO */
-app.use(cors.default());
-
-/* API Rules */
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'OPTIONS, GET, POST, PUT, PATCH, DELETE'
-  );
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
+/* Logging */
+if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 /* Routes */
-app.use(authRoutes);
-app.use('/users', userRoutes);
-app.use('/matrices', matrixRoutes);
-app.use('/sessions', sessionRoutes);
+app.use(authRouter);
+app.use('/users', userRouter);
+app.use('/matrices', matrixRouter);
+app.use('/sessions/', sessionRouter);
+
+app.all('*', (req: Request, res: Response, next: NextFunction) => {
+  next(ROUTE_NOT_FOUND);
+});
 
 /* Error handling */
 app.use(
@@ -53,9 +65,10 @@ app.use(
     res: Response,
     next: NextFunction
   ) => {
+    console.log(err);
     if (err instanceof RequestError) {
       return res.status(err.statusCode).json({
-        message: req.t(err.message as any),
+        message: req.t(err.message),
         errors: err.errors,
       });
     }
@@ -64,5 +77,3 @@ app.use(
     });
   }
 );
-
-export default server;

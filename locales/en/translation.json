@@ -1,0 +1,120 @@
+{
+  "common": {
+    "errors": {
+      "internal": "Internal server error",
+      "validation": "Request validation failed",
+      "badRequest": "Bad request",
+      "user": {
+        "notFound": "User not found",
+        "unauthorized": "User unauthorized"
+      },
+      "route": {
+        "notFound": "Route not found"
+      },
+      "matrix": {
+        "notFound": "Matrix not found"
+      },
+      "session": {
+        "notFound": "Session not found"
+      }
+    },
+    "validations": {
+      "required": "The field is required",
+      "type": "Invalid value type",
+      "string": {
+        "max": "Value is too long",
+        "min": "Value is too short"
+      },
+      "integer": {
+        "max": "Value is too big",
+        "min": "Value is too low"
+      },
+      "email": {
+        "invalid": "E-mail address is invalid",
+        "taken": "E-mail address is already in use"
+      },
+      "password": {
+        "weak": "Password must be at least 8 characters, contain a lower and upper case letter and a digit",
+        "match": "Passwords must match"
+      },
+      "matrix": {
+        "uniqueValues": "All values must be different",
+        "taken": "Name is already taken"
+      },
+      "session": {
+        "matrixId": "Matrix with given id does not exist"
+      }
+    }
+  },
+  "email": {
+    "verify": {
+      "subject": "Verify your e-mail"
+    },
+    "reset": {
+      "subject": "Reset your password"
+    },
+    "fail": "There was an error sending e-mail"
+  },
+  "auth": {
+    "register": {
+      "success": "Account has been created successfully"
+    },
+    "login": {
+      "success": "User authenticated successfully"
+    },
+    "refresh": {
+      "success": "Token has been refreshed successfully"
+    },
+    "logout": {
+      "success": "User has been logged out successfully"
+    },
+    "verify": {
+      "success": "E-mail has been verified successfully"
+    },
+    "forgot": {
+      "success": "Password reset e-mail has been sent successfully"
+    },
+    "reset": {
+      "success": "Password has been reseted successfully"
+    }
+  },
+  "user": {
+    "get": {
+      "success": "User has been retrieved successfully"
+    },
+    "changeName": {
+      "success": "Name has been changed successfully"
+    },
+    "changePassword": {
+      "success": "Password has been changed successfully"
+    }
+  },
+  "matrix": {
+    "create": {
+      "success": "Matrix has been created successfully"
+    },
+    "update": {
+      "success": "Matrix has been updated successfully"
+    },
+    "list": {
+      "success": "Matrices has been listed successfully"
+    },
+    "view": {
+      "success": "Matrix has been listed successfully"
+    },
+    "remove": {
+      "success": "Matrix has been removed successfully"
+    }
+  },
+  "session": {
+    "create": {
+      "success": "Session has been created successfully"
+    },
+    "join": {
+      "success": "Session has been joined successfully"
+    },
+    "createVoting": {
+      "success": "Voting has been created successfully"
+    }
+  }
+}
