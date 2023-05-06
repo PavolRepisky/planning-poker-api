@@ -12,6 +12,7 @@ import sessionRouter from './routes/session.routes';
 import userRouter from './routes/user.routes';
 import HttpCode from './types/HttpCode';
 import RequestError from './types/errors/RequestError';
+import ROUTE_NOT_FOUND from './types/errors/RouteNotFound';
 import i18next from './utils/i18next';
 import validateEnv from './utils/validateEnv';
 
@@ -53,12 +54,7 @@ app.use('/matrices', matrixRouter);
 app.use('/sessions/', sessionRouter);
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
-  next(
-    new RequestError({
-      statusCode: HttpCode.NOT_FOUND,
-      message: 'common.errors.route.notFound',
-    })
-  );
+  next(ROUTE_NOT_FOUND);
 });
 
 /* Error handling */

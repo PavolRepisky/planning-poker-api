@@ -11,8 +11,9 @@ import {
   ResetPasswordInput,
 } from '../schemas/auth.schema';
 import { createUser, removeUser, signTokens } from '../services/auth.service';
-import { findUniqueUser, findUser, updateUser } from '../services/user.service';
+import { findUniqueUser, updateUser } from '../services/user.service';
 import HttpCode from '../types/HttpCode';
+import BAD_REQUEST from '../types/errors/BadRequest';
 import REQUEST_VALIDATION_ERROR from '../types/errors/RequestValidationError';
 import ServerValidationError from '../types/errors/ServerValidationError';
 import USER_NOT_FOUND from '../types/errors/UserNotFound';
@@ -147,7 +148,7 @@ export const refreshAccessTokenHandler = async (
     const refreshToken = req.cookies.refresh_token;
 
     if (!refreshToken) {
-      throw USER_UNAUTHORIZED;
+      throw BAD_REQUEST
     }
 
     const decodedToken = verifyJwt<{ userId: string }>(
@@ -156,16 +157,16 @@ export const refreshAccessTokenHandler = async (
     );
 
     if (!decodedToken) {
-      throw USER_UNAUTHORIZED;
+      throw BAD_REQUEST
     }
 
     const user = await findUniqueUser({ id: decodedToken.userId });
 
     if (!user) {
-      throw USER_UNAUTHORIZED;
+      throw BAD_REQUEST;
     }
 
-    const accessToken = signJwt({ sub: user.id }, 'accessTokenKey', {
+    const accessToken = signJwt({ userId: user.id }, 'accessTokenKey', {
       expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
     });
 
@@ -300,27 +301,11 @@ export const resetPasswordHandler = async (
   next: NextFunction
 ) => {
   try {
-    const passwordResetToken = crypto
-      .createHash('sha256')
-      .update(req.params.resetToken)
-      .digest('hex');
-
-    const user = await findUser({
-      passwordResetToken,
-      passwordResetAt: {
-        gt: new Date(),
-      },
-    });
-
-    if (!user) {
-      throw USER_NOT_FOUND;
-    }
-
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
     await updateUser(
       {
-        id: user.id,
+        id: res.locals.userId,
       },
       {
         password: hashedPassword,

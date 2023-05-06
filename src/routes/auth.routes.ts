@@ -11,6 +11,8 @@ import {
 import { deserializeUser } from '../middleware/deserializeUser';
 import { requireUser } from '../middleware/requireUser';
 import { validate } from '../middleware/validate';
+import { validateResetToken } from '../middleware/validateResetToken';
+import { validateVerificationCode } from '../middleware/validateVerificationCode';
 import {
   forgotPasswordSchema,
   loginSchema,
@@ -28,7 +30,11 @@ authRouter.get('/refresh', refreshAccessTokenHandler);
 
 authRouter.get('/logout', deserializeUser, requireUser, logoutUserHandler);
 
-authRouter.get('/verify-email/:verificationCode', verifyEmailHandler);
+authRouter.get(
+  '/verify-email/:verificationCode',
+  validateVerificationCode,
+  verifyEmailHandler
+);
 
 authRouter.post(
   '/forgot-password',
@@ -38,6 +44,7 @@ authRouter.post(
 
 authRouter.patch(
   '/reset-password/:resetToken',
+  validateResetToken,
   validate(resetPasswordSchema),
   resetPasswordHandler
 );

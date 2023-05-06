@@ -1,7 +1,9 @@
 interface SessionData {
   id: number;
-  hashId: string;
   name: string;
+  hashId: string;
+  matrixId: number;
+  ownerId: string;
 }
 
 export default SessionData;

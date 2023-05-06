@@ -11,23 +11,23 @@ export const deserializeUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    let access_token;
+    let accessToken;
 
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith('Bearer')
     ) {
-      access_token = req.headers.authorization.split(' ')[1];
+      accessToken = req.headers.authorization.split(' ')[1];
     } else if (req.cookies.access_token) {
-      access_token = req.cookies.access_token;
+      accessToken = req.cookies.access_token;
     }
 
-    if (!access_token) {
+    if (!accessToken) {
       throw USER_UNAUTHORIZED;
     }
 
     const decoded = verifyJwt<{ userId: string }>(
-      access_token,
+      accessToken,
       'accessTokenKey'
     );
 

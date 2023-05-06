@@ -60,6 +60,11 @@ class SocketServer {
           this.setupCreateVotingListener(socket, sessionHashId);
           this.setupVoteListener(socket, sessionHashId, userData.connectionId);
           this.setupShowVotesListener(socket, sessionHashId);
+          this.setupDisconnectListener(
+            socket,
+            sessionHashId,
+            userData.connectionId
+          );
 
           const userCountAfterJoin =
             this.socketSessionManager.getSessionUserCount(sessionHashId);
@@ -112,15 +117,17 @@ class SocketServer {
     sessionHashId: string,
     userConnectionId: string
   ) {
-    const userRemoved = this.socketSessionManager.handleUserDisconnect(
-      sessionHashId,
-      userConnectionId,
-      socket.id
-    );
+    socket.on('disconnect', () => {
+      const userRemoved = this.socketSessionManager.handleUserDisconnect(
+        sessionHashId,
+        userConnectionId,
+        socket.id
+      );
 
-    if (userRemoved) {
-      this.emitSocketSessionData(sessionHashId);
-    }
+      if (userRemoved) {
+        this.emitSocketSessionData(sessionHashId);
+      }
+    });
   }
 
   emitSocketSessionData(sessionHashId: string) {

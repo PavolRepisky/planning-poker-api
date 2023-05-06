@@ -10,7 +10,7 @@
     "rebuild": "docker compose build api && docker compose rm --stop -f api && docker compose up -d api",
     "push": "docker exec api npx prisma db push",
     "migrate": "docker exec api npx prisma migrate dev",
-    "studio": "DATABASE_URL=postgresql://admin:admin@localhost:6001/planning_poker?schema=public npx prisma studio",
+    "studio": "DATABASE_URL=postgresql://admin:admin@localhost:6000/planning_poker?schema=public npx prisma studio",
     "seed": "ts-node-dev prisma/seed.ts"
   },
   "author": "Pavol Repiský",

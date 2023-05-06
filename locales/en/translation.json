@@ -3,6 +3,7 @@
     "errors": {
       "internal": "Internal server error",
       "validation": "Request validation failed",
+      "badRequest": "Bad request",
       "user": {
         "notFound": "User not found",
         "unauthorized": "User unauthorized"
