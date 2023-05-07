@@ -1,32 +1,30 @@
 import SocketSessionJoinUserData from '../types/socket/SocketSessionJoinUserData';
 import SocketSessionUserData from '../types/socket/SocketSessionUserData';
-import SocketSessionUserVoteData from '../types/socket/SocketSessionUserVoteData';
 
 class SocketSessionUser {
   private firstName: string;
   private lastName: string;
   private connectionId: string;
-  private vote?: SocketSessionUserVoteData;
-  private socketIds: Set<string>;
+  private voted = false;
+  private socketIds = new Set();
 
   constructor(userData: SocketSessionJoinUserData, socketId: string) {
     this.firstName = userData.firstName;
     this.lastName = userData.lastName;
     this.connectionId = userData.connectionId;
-    this.socketIds = new Set([socketId]);
+    this.socketIds.add(socketId);
   }
 
   getConnectionId() {
     return this.connectionId;
   }
 
-  getData(includeVote: boolean): SocketSessionUserData {
+  getData(): SocketSessionUserData {
     return {
       firstName: this.firstName,
       lastName: this.lastName,
       connectionId: this.connectionId,
-      voted: this.vote !== undefined,
-      vote: includeVote && this.vote ? this.vote : undefined,
+      voted: this.voted,
     };
   }
 
@@ -38,25 +36,8 @@ class SocketSessionUser {
     this.socketIds.delete(socketId);
   }
 
-  updateName(firstName: string, lastName: string) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-  }
-
-  setVote(vote: SocketSessionUserVoteData) {
-    if (
-      this.vote &&
-      this.vote.row === vote.row &&
-      this.vote.column === vote.column
-    ) {
-      this.resetVote();
-      return;
-    }
-    this.vote = vote;
-  }
-
-  resetVote() {
-    this.vote = undefined;
+  setVoted(voted: boolean) {
+    this.voted = voted;
   }
 
   hasDisconnected(): boolean {

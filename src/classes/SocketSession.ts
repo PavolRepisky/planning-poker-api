@@ -6,14 +6,14 @@ import SocketVotingData from '../types/socket/SocketVotingData';
 import SocketSessionUser from './SocketSessionUser';
 
 class SocketSession {
-  private showVotes = false;
-  private users: SocketSessionUser[];
   private hashId: string;
+  private showVotes = false;
+  private users: SocketSessionUser[] = [];
   private voting?: SocketVotingData;
+  private votes: Record<string, SocketSessionUserVoteData> = {};
 
   constructor(hashId: string) {
     this.hashId = hashId;
-    this.users = [];
   }
 
   private getUser(userConnectionId: string): SocketSessionUser | null {
@@ -35,21 +35,27 @@ class SocketSession {
 
   getData(): SocketSessionData {
     return {
-      users: this.users.map((user) => user.getData(this.showVotes)),
+      users: this.users.map((user) => user.getData()),
       voting: this.voting,
-      showVotes: this.showVotes,
+      votes: this.showVotes ? this.votes : undefined,
     };
   }
 
   getUserData(connectionId: string): SocketSessionUserData | null {
     const user = this.getUser(connectionId);
-    return user?.getData(false) ?? null;
+    if (!user) {
+      return null;
+    }
+    return user.getData();
+  }
+
+  getUserVote(connectionId: string): SocketSessionUserVoteData | null {
+    return this.votes[connectionId] ?? null;
   }
 
   addUser(socketId: string, userData: SocketSessionJoinUserData): void {
     const existingUser = this.getUser(userData.connectionId);
     if (existingUser) {
-      existingUser.updateName(userData.firstName, userData.lastName);
       existingUser.addSocketId(socketId);
       return;
     }
@@ -64,10 +70,24 @@ class SocketSession {
     userConnectionId: string,
     userVoteData: SocketSessionUserVoteData
   ) {
-    const existingUser = this.getUser(userConnectionId);
-    if (existingUser) {
-      existingUser.setVote(userVoteData);
+    const user = this.getUser(userConnectionId);
+    if (!user) {
+      return;
     }
+    const userOldVote = this.votes[userConnectionId];
+
+    if (
+      userOldVote &&
+      userOldVote.row === userVoteData.row &&
+      userOldVote.column === userVoteData.column
+    ) {
+      user.setVoted(false);
+      delete this.votes[userConnectionId];
+      return;
+    }
+
+    user.setVoted(true);
+    this.votes[userConnectionId] = userVoteData;
   }
 
   removeUserIfDisconnected(
@@ -104,8 +124,9 @@ class SocketSession {
 
   resetUsersVotes() {
     this.users.forEach((user) => {
-      user.resetVote();
+      user.setVoted(false);
     });
+    this.votes = {};
   }
 }
 
