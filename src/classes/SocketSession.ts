@@ -1,5 +1,6 @@
 import SocketSessionData from '../types/socket/SocketSessionData';
 import SocketSessionJoinUserData from '../types/socket/SocketSessionJoinUserData';
+import SocketSessionUserData from '../types/socket/SocketSessionUserData';
 import SocketSessionUserVoteData from '../types/socket/SocketSessionUserVoteData';
 import SocketVotingData from '../types/socket/SocketVotingData';
 import SocketSessionUser from './SocketSessionUser';
@@ -38,6 +39,11 @@ class SocketSession {
       voting: this.voting,
       showVotes: this.showVotes,
     };
+  }
+
+  getUserData(connectionId: string): SocketSessionUserData | null {
+    const user = this.getUser(connectionId);
+    return user?.getData(false) ?? null;
   }
 
   addUser(socketId: string, userData: SocketSessionJoinUserData): void {

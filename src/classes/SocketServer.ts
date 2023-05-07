@@ -29,12 +29,26 @@ class SocketServer {
 
   setupConnection() {
     this.io.on('connection', (socket: socketIO.Socket) => {
+      this.setupGetUserListener(socket);
       this.setupJoinListener(socket);
 
       socket.on('disconnect', () => {
         socket.disconnect();
       });
     });
+  }
+
+  setupGetUserListener(socket: socketIO.Socket) {
+    socket.on(
+      'getUser',
+      (sessionHashId: string, connectionId: string, callback) => {
+        const userData = this.socketSessionManager.getUserData(
+          sessionHashId,
+          connectionId
+        );
+        callback(userData);
+      }
+    );
   }
 
   setupJoinListener(socket: socketIO.Socket) {

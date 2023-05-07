@@ -1,6 +1,7 @@
 import { findUniqueSession } from '../services/session.service';
 import SocketSessionData from '../types/socket/SocketSessionData';
 import SocketSessionJoinUserData from '../types/socket/SocketSessionJoinUserData';
+import SocketSessionUserData from '../types/socket/SocketSessionUserData';
 import SocketSessionUserVoteData from '../types/socket/SocketSessionUserVoteData';
 import SocketVotingData from '../types/socket/SocketVotingData';
 import SocketSession from './SocketSession';
@@ -98,6 +99,17 @@ class SocketSessionManager {
       return null;
     }
     return socketSession.getData();
+  }
+
+  getUserData(
+    sessionHashId: string,
+    connectionId: string
+  ): SocketSessionUserData | null {
+    const socketSession = this.getSession(sessionHashId);
+    if (!socketSession) {
+      return null;
+    }
+    return socketSession.getUserData(connectionId);
   }
 
   getSessionUserCount(sessionHashId: string): number {
