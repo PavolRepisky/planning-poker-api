@@ -112,6 +112,17 @@ class SocketSessionManager {
     return socketSession.getUserData(connectionId);
   }
 
+  getUserVote(
+    sessionHashId: string,
+    connectionId: string
+  ): SocketSessionUserVoteData | null {
+    const socketSession = this.getSession(sessionHashId);
+    if (!socketSession) {
+      return null;
+    }
+    return socketSession.getUserVote(connectionId);
+  }
+
   getSessionUserCount(sessionHashId: string): number {
     const socketSession = this.getSession(sessionHashId);
     if (!socketSession) {

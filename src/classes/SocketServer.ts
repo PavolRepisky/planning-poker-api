@@ -70,6 +70,7 @@ class SocketServer {
 
         if (sessionJoined) {
           socket.join(sessionHashId);
+          socket.join(userData.connectionId);
 
           this.setupCreateVotingListener(socket, sessionHashId);
           this.setupVoteListener(socket, sessionHashId, userData.connectionId);
@@ -87,7 +88,11 @@ class SocketServer {
           } else {
             const socketSessionData =
               this.socketSessionManager.getSessionData(sessionHashId);
-            callback(socketSessionData);
+            const userVote = this.socketSessionManager.getUserVote(
+              sessionHashId,
+              userData.connectionId
+            );
+            callback({ sessionData: socketSessionData, userVote });
           }
         }
       }
@@ -113,6 +118,7 @@ class SocketServer {
         voteData
       );
       this.emitSocketSessionData(sessionHashId);
+      this.emitUserVote(userConnectionId, voteData);
     });
   }
 
@@ -149,6 +155,10 @@ class SocketServer {
       this.socketSessionManager.getSessionData(sessionHashId);
 
     this.io.to(sessionHashId).emit('sessionUpdate', socketSessionData);
+  }
+
+  emitUserVote(connectionId: string, voteData: SocketSessionUserVoteData) {
+    this.io.to(connectionId).emit('voteUpdate', voteData);
   }
 }
 
