@@ -10,8 +10,8 @@ import {
 } from '../controllers/auth.controller';
 import { deserializeUser } from '../middleware/deserializeUser';
 import { requireUser } from '../middleware/requireUser';
-import { validate } from '../middleware/validate';
 import { validateResetToken } from '../middleware/validateResetToken';
+import { validateSchema } from '../middleware/validateSchema';
 import { validateVerificationCode } from '../middleware/validateVerificationCode';
 import {
   forgotPasswordSchema,
@@ -22,9 +22,13 @@ import {
 
 const authRouter = express.Router();
 
-authRouter.post('/register', validate(regsiterSchema), registerUserHandler);
+authRouter.post(
+  '/register',
+  validateSchema(regsiterSchema),
+  registerUserHandler
+);
 
-authRouter.post('/login', validate(loginSchema), loginUserHandler);
+authRouter.post('/login', validateSchema(loginSchema), loginUserHandler);
 
 authRouter.get('/refresh', refreshAccessTokenHandler);
 
@@ -38,14 +42,14 @@ authRouter.get(
 
 authRouter.post(
   '/forgot-password',
-  validate(forgotPasswordSchema),
+  validateSchema(forgotPasswordSchema),
   forgotPasswordHandler
 );
 
 authRouter.patch(
   '/reset-password/:resetToken',
   validateResetToken,
-  validate(resetPasswordSchema),
+  validateSchema(resetPasswordSchema),
   resetPasswordHandler
 );
 

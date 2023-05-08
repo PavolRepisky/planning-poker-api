@@ -6,6 +6,7 @@
       "badRequest": "Bad request",
       "user": {
         "notFound": "User not found",
+        "notVerified": "User is not verified",
         "unauthorized": "User unauthorized"
       },
       "route": {
@@ -39,7 +40,8 @@
       },
       "matrix": {
         "uniqueValues": "All values must be different",
-        "taken": "Name is already taken"
+        "taken": "Name is already taken",
+        "invalidId": "Matrix with given id was not found"
       },
       "session": {
         "matrixId": "Matrix with given id does not exist"

@@ -25,7 +25,7 @@ const extractErrorsData = (
   return errorsData;
 };
 
-export const validate =
+export const validateSchema =
   (schema: yup.ObjectSchema<any>) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {

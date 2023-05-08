@@ -40,7 +40,7 @@ class SocketServer {
 
   setupGetUserListener(socket: socketIO.Socket) {
     socket.on(
-      'getUser',
+      'get_user',
       (sessionHashId: string, connectionId: string, callback) => {
         const userData = this.socketSessionManager.getUserData(
           sessionHashId,
@@ -53,7 +53,7 @@ class SocketServer {
 
   setupJoinListener(socket: socketIO.Socket) {
     socket.on(
-      'joinSession',
+      'join_session',
       async (
         sessionHashId: string,
         userData: SocketSessionJoinUserData,
@@ -100,7 +100,7 @@ class SocketServer {
   }
 
   setupCreateVotingListener(socket: socketIO.Socket, sessionHashId: string) {
-    socket.on('createVoting', (votingData: SocketVotingData) => {
+    socket.on('create_voting', (votingData: SocketVotingData) => {
       this.socketSessionManager.handleCreateVoting(sessionHashId, votingData);
       this.emitSocketSessionData(sessionHashId);
     });
@@ -123,7 +123,7 @@ class SocketServer {
   }
 
   setupShowVotesListener(socket: socketIO.Socket, sessionHashId: string) {
-    socket.on('showVotes', () => {
+    socket.on('show_votes', () => {
       const modeSwicthed =
         this.socketSessionManager.handleShowVotes(sessionHashId);
       if (modeSwicthed) {
@@ -154,11 +154,11 @@ class SocketServer {
     const socketSessionData =
       this.socketSessionManager.getSessionData(sessionHashId);
 
-    this.io.to(sessionHashId).emit('sessionUpdate', socketSessionData);
+    this.io.to(sessionHashId).emit('session_update', socketSessionData);
   }
 
   emitUserVote(connectionId: string, voteData: SocketSessionUserVoteData) {
-    this.io.to(connectionId).emit('voteUpdate', voteData);
+    this.io.to(connectionId).emit('vote_update', voteData);
   }
 }
 
