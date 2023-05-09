@@ -1,5 +1,5 @@
 export default {
-  refreshTokenExpiresIn: 60,
+  refreshTokenExpiresIn: 180,
   accessTokenExpiresIn: 15,
   hashSalt: 12,
   maxNameLength: 50,
