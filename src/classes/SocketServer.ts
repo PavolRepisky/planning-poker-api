@@ -117,8 +117,9 @@ class SocketServer {
         userConnectionId,
         voteData
       );
+      const userVote = this.socketSessionManager.getUserVote(sessionHashId, userConnectionId);
       this.emitSocketSessionData(sessionHashId);
-      this.emitUserVote(userConnectionId, voteData);
+      this.emitUserVote(userConnectionId, userVote);
     });
   }
 
@@ -157,7 +158,7 @@ class SocketServer {
     this.io.to(sessionHashId).emit('session_update', socketSessionData);
   }
 
-  emitUserVote(connectionId: string, voteData: SocketSessionUserVoteData) {
+  emitUserVote(connectionId: string, voteData: SocketSessionUserVoteData | null) {
     this.io.to(connectionId).emit('vote_update', voteData);
   }
 }
