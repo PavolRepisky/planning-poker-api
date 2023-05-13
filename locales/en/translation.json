@@ -6,24 +6,24 @@
       "badRequest": "Bad request",
       "user": {
         "notFound": "User not found",
+        "notVerified": "User is not verified",
         "unauthorized": "User unauthorized"
       },
       "route": {
         "notFound": "Route not found"
       },
       "matrix": {
-        "notFound": "Matrix not found"
+        "notFound": "Evaluation matrix not found"
       },
       "session": {
-        "notFound": "Session not found"
+        "notFound": "Voting session not found"
       }
     },
     "validations": {
       "required": "The field is required",
       "type": "Invalid value type",
       "string": {
-        "max": "Value is too long",
-        "min": "Value is too short"
+        "max": "Value is too long"
       },
       "integer": {
         "max": "Value is too big",
@@ -39,21 +39,21 @@
       },
       "matrix": {
         "uniqueValues": "All values must be different",
-        "taken": "Name is already taken"
+        "taken": "Name is already taken",
+        "invalidId": "Evaluation matrix with given ID was not found"
       },
       "session": {
-        "matrixId": "Matrix with given id does not exist"
+        "matrixId": "Evaluation matrix with given ID does not exist"
       }
     }
   },
   "email": {
     "verify": {
-      "subject": "Verify your e-mail"
+      "subject": "Email verification"
     },
     "reset": {
-      "subject": "Reset your password"
-    },
-    "fail": "There was an error sending e-mail"
+      "subject": "Password reset"
+    }
   },
   "auth": {
     "register": {
@@ -75,7 +75,7 @@
       "success": "Password reset e-mail has been sent successfully"
     },
     "reset": {
-      "success": "Password has been reseted successfully"
+      "success": "Password has been reset successfully"
     }
   },
   "user": {
@@ -91,27 +91,27 @@
   },
   "matrix": {
     "create": {
-      "success": "Matrix has been created successfully"
+      "success": "Evaluation matrix has been created successfully"
     },
     "update": {
-      "success": "Matrix has been updated successfully"
+      "success": "Evaluation matrix has been updated successfully"
     },
     "list": {
-      "success": "Matrices has been listed successfully"
+      "success": "Evaluation matrices have been listed successfully"
     },
     "view": {
-      "success": "Matrix has been listed successfully"
+      "success": "Evaluation matrix has been listed successfully"
     },
     "remove": {
-      "success": "Matrix has been removed successfully"
+      "success": "Evaluation matrix has been removed successfully"
     }
   },
   "session": {
     "create": {
-      "success": "Session has been created successfully"
+      "success": "Voting session has been created successfully"
     },
     "join": {
-      "success": "Session has been joined successfully"
+      "success": "Voting session has been joined successfully"
     },
     "createVoting": {
       "success": "Voting has been created successfully"

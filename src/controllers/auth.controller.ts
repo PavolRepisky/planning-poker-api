@@ -17,6 +17,7 @@ import BAD_REQUEST from '../types/errors/BadRequest';
 import REQUEST_VALIDATION_ERROR from '../types/errors/RequestValidationError';
 import ServerValidationError from '../types/errors/ServerValidationError';
 import USER_NOT_FOUND from '../types/errors/UserNotFound';
+import USER_NOT_VERIFIED from '../types/errors/UserNotVerified';
 import USER_UNAUTHORIZED from '../types/errors/UserUnauthorized';
 import { signJwt, verifyJwt } from '../utils/jwt';
 
@@ -111,11 +112,11 @@ export const loginUserHandler = async (
       { id: true, email: true, verified: true, password: true }
     );
 
-    if (
-      !user ||
-      !user.verified ||
-      !(await bcrypt.compare(password, user.password))
-    ) {
+    if (user && !user.verified) {
+      throw USER_NOT_VERIFIED;
+    }
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       throw USER_UNAUTHORIZED;
     }
 
@@ -148,7 +149,7 @@ export const refreshAccessTokenHandler = async (
     const refreshToken = req.cookies.refresh_token;
 
     if (!refreshToken) {
-      throw BAD_REQUEST
+      throw BAD_REQUEST;
     }
 
     const decodedToken = verifyJwt<{ userId: string }>(
@@ -157,7 +158,7 @@ export const refreshAccessTokenHandler = async (
     );
 
     if (!decodedToken) {
-      throw BAD_REQUEST
+      throw BAD_REQUEST;
     }
 
     const user = await findUniqueUser({ id: decodedToken.userId });
@@ -251,7 +252,7 @@ export const forgotPasswordHandler = async (
     }
 
     if (!user.verified) {
-      throw USER_UNAUTHORIZED;
+      throw USER_NOT_VERIFIED;
     }
 
     const resetToken = crypto.randomBytes(32).toString('hex');
@@ -273,6 +274,7 @@ export const forgotPasswordHandler = async (
       const url = `${config.get<string>(
         'origin'
       )}/reset-password/${resetToken}`;
+      
       await new Email(user, url).sendPasswordResetToken(req);
 
       res.status(HttpCode.OK).json({

@@ -9,18 +9,18 @@ import {
 } from '../controllers/matrix.controller';
 import { deserializeUser } from '../middleware/deserializeUser';
 import { requireUser } from '../middleware/requireUser';
-import { validate } from '../middleware/validate';
+import { validateSchema } from '../middleware/validateSchema';
 import { createEditSchema } from '../schemas/matrix.schema';
 
 const matrixRouter = express.Router();
 
 matrixRouter.use(deserializeUser, requireUser);
 
-matrixRouter.post('/', validate(createEditSchema), createMatrixHandler);
+matrixRouter.post('/', validateSchema(createEditSchema), createMatrixHandler);
 
 matrixRouter.patch(
   '/:id(\\d+)/',
-  validate(createEditSchema),
+  validateSchema(createEditSchema),
   updateMatrixHandler
 );
 

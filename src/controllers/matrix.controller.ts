@@ -13,7 +13,6 @@ import MatrixData from '../types/MatrixData';
 import MATRIX_NOT_FOUND from '../types/errors/MatrixNotFound';
 import REQUEST_VALIDATION_ERROR from '../types/errors/RequestValidationError';
 import ServerValidationError from '../types/errors/ServerValidationError';
-import USER_UNAUTHORIZED from '../types/errors/UserUnauthorized';
 
 export const createMatrixHandler = async (
   req: Request<{}, {}, CreateEditInput['body']>,
@@ -78,12 +77,8 @@ export const updateMatrixHandler = async (
       { name: true, creatorId: true }
     );
 
-    if (!matrix) {
+    if (!matrix || matrix.creatorId != user.id) {
       throw MATRIX_NOT_FOUND;
-    }
-
-    if (matrix.creatorId != user.id) {
-      throw USER_UNAUTHORIZED;
     }
 
     const updatedMatrix = await updateMatrix(

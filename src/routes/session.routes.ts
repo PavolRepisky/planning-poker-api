@@ -6,7 +6,7 @@ import {
 } from '../controllers/session.controller';
 import { deserializeUser } from '../middleware/deserializeUser';
 import { requireUser } from '../middleware/requireUser';
-import { validate } from '../middleware/validate';
+import { validateSchema } from '../middleware/validateSchema';
 import {
   createSessionSchema,
   createVotingSchema,
@@ -18,7 +18,7 @@ sessionRouter.post(
   '/',
   deserializeUser,
   requireUser,
-  validate(createSessionSchema),
+  validateSchema(createSessionSchema),
   createSessionHandler
 );
 
@@ -28,7 +28,7 @@ sessionRouter.post(
   '/:hashId/voting',
   deserializeUser,
   requireUser,
-  validate(createVotingSchema),
+  validateSchema(createVotingSchema),
   createVotingHandler
 );
 

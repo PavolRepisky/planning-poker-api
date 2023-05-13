@@ -15,6 +15,8 @@ import SessionData from '../types/SessionData';
 import VotingData from '../types/VotingData';
 import MATRIX_NOT_FOUND from '../types/errors/MatrixNotFound';
 import SESSION_NOT_FOUND from '../types/errors/SessionNotFound';
+import ServerValidationError from '../types/errors/ServerValidationError';
+import REQUEST_VALIDATION_ERROR from '../types/errors/RequestValidationError';
 
 export const createSessionHandler = async (
   req: Request<{}, {}, CreateSessionInput['body']>,
@@ -28,7 +30,15 @@ export const createSessionHandler = async (
     const matrix = await findUniqueMatrix({ id: matrixId });
 
     if (!matrix || user.id !== matrix.creatorId) {
-      throw MATRIX_NOT_FOUND;
+      const errors: ServerValidationError[] = [
+        {
+          path: 'matrixId',
+          location: 'body',
+          value: `${req.body.matrixId}`,
+          message: req.t('common.validations.matrix.invalidId'),
+        },
+      ];
+      throw REQUEST_VALIDATION_ERROR(errors);
     }
 
     const session = await createSession({ name, matrixId, ownerId: user.id });
