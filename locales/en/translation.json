@@ -1,0 +1,120 @@
+{
+  "common": {
+    "errors": {
+      "internal": "Internal server error",
+      "validation": "Request validation failed",
+      "badRequest": "Bad request",
+      "user": {
+        "notFound": "User not found",
+        "notVerified": "User is not verified",
+        "unauthorized": "User unauthorized"
+      },
+      "route": {
+        "notFound": "Route not found"
+      },
+      "matrix": {
+        "notFound": "Evaluation matrix not found"
+      },
+      "session": {
+        "notFound": "Voting session not found"
+      }
+    },
+    "validations": {
+      "required": "The field is required",
+      "type": "Invalid value type",
+      "string": {
+        "max": "Value is too long"
+      },
+      "integer": {
+        "max": "Value is too big",
+        "min": "Value is too low"
+      },
+      "email": {
+        "invalid": "E-mail address is invalid",
+        "taken": "E-mail address is already in use"
+      },
+      "password": {
+        "weak": "Password must be at least 8 characters, contain a lower and upper case letter and a digit",
+        "match": "Passwords must match"
+      },
+      "matrix": {
+        "uniqueValues": "All values must be different",
+        "taken": "Name is already taken",
+        "invalidId": "Evaluation matrix with given ID was not found"
+      },
+      "session": {
+        "matrixId": "Evaluation matrix with given ID does not exist"
+      }
+    }
+  },
+  "email": {
+    "verify": {
+      "subject": "Email verification"
+    },
+    "reset": {
+      "subject": "Password reset"
+    }
+  },
+  "auth": {
+    "register": {
+      "success": "Account has been created successfully"
+    },
+    "login": {
+      "success": "User authenticated successfully"
+    },
+    "refresh": {
+      "success": "Token has been refreshed successfully"
+    },
+    "logout": {
+      "success": "User has been logged out successfully"
+    },
+    "verify": {
+      "success": "E-mail has been verified successfully"
+    },
+    "forgot": {
+      "success": "Password reset e-mail has been sent successfully"
+    },
+    "reset": {
+      "success": "Password has been reset successfully"
+    }
+  },
+  "user": {
+    "get": {
+      "success": "User has been retrieved successfully"
+    },
+    "changeName": {
+      "success": "Name has been changed successfully"
+    },
+    "changePassword": {
+      "success": "Password has been changed successfully"
+    }
+  },
+  "matrix": {
+    "create": {
+      "success": "Evaluation matrix has been created successfully"
+    },
+    "update": {
+      "success": "Evaluation matrix has been updated successfully"
+    },
+    "list": {
+      "success": "Evaluation matrices have been listed successfully"
+    },
+    "view": {
+      "success": "Evaluation matrix has been listed successfully"
+    },
+    "remove": {
+      "success": "Evaluation matrix has been removed successfully"
+    }
+  },
+  "session": {
+    "create": {
+      "success": "Voting session has been created successfully"
+    },
+    "join": {
+      "success": "Voting session has been joined successfully"
+    },
+    "createVoting": {
+      "success": "Voting has been created successfully"
+    }
+  }
+}

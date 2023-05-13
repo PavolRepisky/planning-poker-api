@@ -1,13 +1,11 @@
 version: '3.9'
 services:
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: api
     command: npm run dev
     depends_on:
-      - db
+      - postgres_dev
     ports:
       - '3000:3000'
     volumes:
@@ -16,23 +14,23 @@ services:
     env_file:
       - .env.development
 
-  db:
-    image: postgres:15-alpine
-    container_name: db
+  postgres_dev:
+    image: postgres:latest
+    container_name: postgres_dev
     ports:
       - 6000:5432
     env_file:
       - .env.development
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
 
-  db-test:
-    image: postgres:15-alpine
-    container_name: db-test
+  postgres_test:
+    image: postgres:latest
+    container_name: postgres_test
     ports:
       - 6001:5432
     env_file:
       - .env.test
 
 volumes:
-  db-data:
+  postgres-data:

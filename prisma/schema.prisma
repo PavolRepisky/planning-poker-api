@@ -6,3 +6,77 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String @id @default(uuid())
+  firstName String @db.VarChar(50)
+  lastName  String @db.VarChar(50)
+  email     String @unique
+  password  String
+
+  verified         Boolean @default(false)
+  verificationCode String  @unique @default(uuid())
+
+  passwordResetToken String?
+  passwordResetAt    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  matrices Matrix[]
+  sessions Session[]
+
+  @@map("users")
+}
+
+model Matrix {
+  id      Int    @id @default(autoincrement())
+  name    String
+  rows    Int
+  columns Int
+  values  Json
+
+  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions Session[]
+
+  @@unique([creatorId, name])
+  @@map("matrices")
+}
+
+model Session {
+  id     Int    @id @default(autoincrement())
+  hashId String @unique @default(uuid())
+  name   String
+
+  matrix   Matrix @relation(fields: [matrixId], references: [id], onDelete: Cascade)
+  matrixId Int
+  owner    User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  votings Voting[]
+
+  @@map("sessions")
+}
+
+model Voting {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  active      Boolean
+
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("votings")
+}

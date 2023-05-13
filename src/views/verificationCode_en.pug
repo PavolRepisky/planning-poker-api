@@ -1,0 +1,17 @@
+extends base
+
+block content
+  p Hi #{firstName},
+  p You can verify your e-mail by clicking on the button below.
+  table.btn.btn-primary(role='presentation' border='0' cellpadding='0' cellspacing='0')
+    tbody
+      tr
+        td(align='left')
+          table(role='presentation' border='0' cellpadding='0' cellspacing='0')
+            tbody
+              tr
+                td
+                  a(href=`${url}` target='_blank') Verify E-mail
+  p If you did not register for our tool, you can safely ignore this e-mail.
+  p Best Regards!
+  p EstiMate
