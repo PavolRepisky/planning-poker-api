@@ -7,21 +7,21 @@ import ServerValidationError from '../../src/types/errors/ServerValidationError'
 import prisma from '../../src/utils/prisma';
 import { generateTestUsers } from '../helpers/testUser.helper';
 
-let testUser: any;
+let testUsers: Record<string, any>[];
 
 beforeAll(async () => {
-  testUser = (
-    await generateTestUsers(1, {
-      verifyEmail: true,
-      setPasswordResetToken: true,
-    })
-  )[0];
+  testUsers = await generateTestUsers(2, {
+    verifyEmail: true,
+    setPasswordResetToken: true,
+  });
 });
 
 afterAll(async () => {
   await prisma.user.deleteMany({
     where: {
-      id: testUser.id,
+      id: {
+        in: testUsers.map((testUser: any) => testUser.id),
+      },
     },
   });
 });
@@ -29,6 +29,8 @@ afterAll(async () => {
 describe('PATCH /reset-password/:resetToken', () => {
   describe('Given a request with a valid data', () => {
     it('should respond with a 200 status code and a message. Access token, refresh token and logged in cookies should be reset. User reset token and date should be also reset. A new user password should be set.', async () => {
+      const testUser = testUsers[0];
+
       const requestBody = {
         password: testUser.password + 'new',
         confirmationPassword: testUser.password + 'new',
@@ -73,6 +75,8 @@ describe('PATCH /reset-password/:resetToken', () => {
 
   describe('Given a request with an invalid reset token', () => {
     it('should respond with a 404 status code and a message, if the reset token is missing or invalid', async () => {
+      const testUser = testUsers[1];
+
       const requestBody = {
         password: testUser.password + 'new',
         confirmationPassword: testUser.password + 'new',
@@ -96,15 +100,14 @@ describe('PATCH /reset-password/:resetToken', () => {
 
   describe('Given a request with an invalid password data', () => {
     it('should respond with a 400 status code, a message and a validation error, if the password is missing', async () => {
+      const testUser = testUsers[1];
+
       const requestBodyWithoutPassword = {
-        email: 'register@test10.com',
         confirmationPassword: 'Password123',
       };
-
       const response = await request(server)
         .patch(`/reset-password/${testUser.resetToken}`)
         .send(requestBodyWithoutPassword);
-
       expect(response.statusCode).toBe(HttpCode.BAD_REQUEST);
       expect(typeof response.body.message).toBe('string');
       expect(response.body.errors).toBeInstanceOf(Array);
@@ -115,17 +118,16 @@ describe('PATCH /reset-password/:resetToken', () => {
         )
       ).toBeTruthy();
     });
-
     it('should respond with a 400 status code, a message and a validation error, if the password is too weak', async () => {
+      const testUser = testUsers[1];
+
       const requestBodyWithWeakPassword = {
         password: 'weakpassword',
         confirmationPassword: 'Password123',
       };
-
       const response = await request(server)
         .patch(`/reset-password/${testUser.resetToken}`)
         .send(requestBodyWithWeakPassword);
-
       expect(response.statusCode).toBe(HttpCode.BAD_REQUEST);
       expect(typeof response.body.message).toBe('string');
       expect(response.body.errors).toBeInstanceOf(Array);
@@ -140,13 +142,17 @@ describe('PATCH /reset-password/:resetToken', () => {
 
   describe('Given a request with an invalid confirmation password data', () => {
     it('should respond with a 400 status code, a message and a validation error, if the confirmation password is missing', async () => {
+      const testUser = testUsers[1];
+
       const requestBodyWithoutConfirmationPassword = {
         password: testUser.password + 'new',
       };
-
       const response = await request(server)
         .patch(`/reset-password/${testUser.resetToken}`)
         .send(requestBodyWithoutConfirmationPassword);
+
+      console.error('testUser=', testUser);
+      console.log('res=', response);
 
       expect(response.statusCode).toBe(HttpCode.BAD_REQUEST);
       expect(typeof response.body.message).toBe('string');
@@ -159,19 +165,17 @@ describe('PATCH /reset-password/:resetToken', () => {
         )
       ).toBeTruthy();
     });
-
     it('should respond with a 400 status code, a message and a validation error, if the confirmation password does not match the password', async () => {
-      const password = 'Password123';
+      const testUser = testUsers[1];
 
+      const password = 'Password123';
       const requestBodyWithNonMatchingPasswords = {
         password: password,
         confirmationPassword: password + 'mismatch',
       };
-
       const response = await request(server)
         .patch(`/reset-password/${testUser.resetToken}`)
         .send(requestBodyWithNonMatchingPasswords);
-
       expect(response.statusCode).toBe(HttpCode.BAD_REQUEST);
       expect(typeof response.body.message).toBe('string');
       expect(response.body.errors).toBeInstanceOf(Array);

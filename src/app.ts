@@ -65,7 +65,6 @@ app.use(
     res: Response,
     next: NextFunction
   ) => {
-    console.log(err);
     if (err instanceof RequestError) {
       return res.status(err.statusCode).json({
         message: req.t(err.message),
