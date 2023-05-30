@@ -151,9 +151,6 @@ describe('PATCH /reset-password/:resetToken', () => {
         .patch(`/reset-password/${testUser.resetToken}`)
         .send(requestBodyWithoutConfirmationPassword);
 
-      console.error('testUser=', testUser);
-      console.log('res=', response);
-
       expect(response.statusCode).toBe(HttpCode.BAD_REQUEST);
       expect(typeof response.body.message).toBe('string');
       expect(response.body.errors).toBeInstanceOf(Array);
