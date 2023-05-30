@@ -41,19 +41,19 @@ describe('GET /refresh', () => {
   });
 
   describe('Given a request with a invalid refresh token cookie', () => {
-    it('should respond with a 401 status code and a message, if the refresh token cookie is missing', async () => {
+    it('should respond with a 400 status code and a message, if the refresh token cookie is missing', async () => {
       const response = await request(server).get('/refresh');
 
-      expect(response.statusCode).toBe(HttpCode.UNAUTHORIZED);
+      expect(response.statusCode).toBe(HttpCode.BAD_REQUEST);
       expect(typeof response.body.message).toBe('string');
     });
 
-    it('should respond with a 401 status code and a message, if the refresh token cookie is invalid', async () => {
+    it('should respond with a 400 status code and a message, if the refresh token cookie is invalid', async () => {
       const response = await request(server)
         .get('/refresh')
         .set('Cookie', [`refresh_token=${testUser.refreshToken}` + 'invalid']);
 
-      expect(response.statusCode).toBe(HttpCode.UNAUTHORIZED);
+      expect(response.statusCode).toBe(HttpCode.BAD_REQUEST);
       expect(typeof response.body.message).toBe('string');
     });
   });

@@ -110,7 +110,7 @@ describe('PATCH /matrices/:id', () => {
   });
 
   describe('Given a request with invalid matrix id', () => {
-    it('should respond with a 401 status code and a message, if the user is not owner of the matrix', async () => {
+    it('should respond with a 404 status code and a message, if the user is not owner of the matrix', async () => {
       const user1 = testUsers[0];
       const user2 = testUsers[1];
       const matrix = user1.matrices[0];
@@ -130,7 +130,7 @@ describe('PATCH /matrices/:id', () => {
         .send(requestBody)
         .set('Authorization', 'Bearer ' + user2.accessToken);
 
-      expect(response.statusCode).toBe(HttpCode.UNAUTHORIZED);
+      expect(response.statusCode).toBe(HttpCode.NOT_FOUND);
       expect(typeof response.body.message).toBe('string');
     });
 

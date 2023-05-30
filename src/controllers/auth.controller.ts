@@ -307,7 +307,7 @@ export const resetPasswordHandler = async (
 
     await updateUser(
       {
-        id: res.locals.userId,
+        id: res.locals.user.id,
       },
       {
         password: hashedPassword,

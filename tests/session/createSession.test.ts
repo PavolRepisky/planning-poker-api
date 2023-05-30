@@ -190,7 +190,7 @@ describe('POST /sessions', () => {
       ).toBeTruthy();
     });
 
-    it('should respond with a 404 status code and a message, if matrix with the given matrix id does not exist', async () => {
+    it('should respond with a 400 status code, a message and a validation error, if matrix with the given matrix id does not exist', async () => {
       const user = testUsers[0];
 
       const requestBody = {
@@ -203,11 +203,18 @@ describe('POST /sessions', () => {
         .send(requestBody)
         .set('Authorization', 'Bearer ' + user.accessToken);
 
-      expect(response.statusCode).toBe(HttpCode.NOT_FOUND);
+      expect(response.statusCode).toBe(HttpCode.BAD_REQUEST);
       expect(typeof response.body.message).toBe('string');
+      expect(response.body.errors).toBeInstanceOf(Array);
+      expect(response.body.errors.length).toBeGreaterThan(0);
+      expect(
+        response.body.errors.some(
+          (error: ServerValidationError) => error.path === 'matrixId'
+        )
+      ).toBeTruthy();
     });
 
-    it('should respond with a 404 status code and a message, if the user is not owner of the given matrix', async () => {
+    it('should respond with a 400 status code, a message and a validation error, if the user is not owner of the given matrix', async () => {
       const user1 = testUsers[0];
       const user2 = testUsers[1];
       const matrix = user1.matrices[0];
@@ -222,8 +229,15 @@ describe('POST /sessions', () => {
         .send(requestBody)
         .set('Authorization', 'Bearer ' + user2.accessToken);
 
-      expect(response.statusCode).toBe(HttpCode.NOT_FOUND);
+      expect(response.statusCode).toBe(HttpCode.BAD_REQUEST);
       expect(typeof response.body.message).toBe('string');
+      expect(response.body.errors).toBeInstanceOf(Array);
+      expect(response.body.errors.length).toBeGreaterThan(0);
+      expect(
+        response.body.errors.some(
+          (error: ServerValidationError) => error.path === 'matrixId'
+        )
+      ).toBeTruthy();
     });
   });
 });

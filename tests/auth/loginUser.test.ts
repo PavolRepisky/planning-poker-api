@@ -52,7 +52,7 @@ describe('POST /login', () => {
   });
 
   describe('Given a request with unverified user', () => {
-    it('should respond with a 401 status code and a message.', async () => {
+    it('should respond with a 403 status code and a message.', async () => {
       const requestBody = {
         email: unverifiedUser.email,
         password: unverifiedUser.password,
@@ -60,7 +60,7 @@ describe('POST /login', () => {
 
       const response = await request(server).post('/login').send(requestBody);
 
-      expect(response.statusCode).toBe(HttpCode.UNAUTHORIZED);
+      expect(response.statusCode).toBe(HttpCode.FORBIDDEN);
       expect(typeof response.body.message).toBe('string');
     });
   });

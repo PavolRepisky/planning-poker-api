@@ -45,7 +45,7 @@ describe('POST /forgot-password', () => {
   });
 
   describe('Given a request with a valid data and unverified user', () => {
-    it('should respond with a 401 status code and a message.', async () => {
+    it('should respond with a 403 status code and a message.', async () => {
       const requestBody = {
         email: unverifiedUser.email,
       };
@@ -54,7 +54,7 @@ describe('POST /forgot-password', () => {
         .post('/forgot-password')
         .send(requestBody);
 
-      expect(response.statusCode).toBe(HttpCode.UNAUTHORIZED);
+      expect(response.statusCode).toBe(HttpCode.FORBIDDEN);
       expect(typeof response.body.message).toBe('string');
     });
   });
